@@ -149,3 +149,4 @@ for global url
 
 **************** making all links working *************
 adding others remaining link of about,shop,services,contact us etc 
+
