@@ -1,0 +1,151 @@
+ we are developing the project ecommerce website of furni related to the furniture 
+  we have downloaded the tempalate realted to furniture 
+
+  now we have to setup that template in furni project
+
+  we are  creating virtual environment for this project so we can isolate python installs , and pip packages and also used to manage packages allow developers to control software dependencies in Python code.
+
+  Install virtual environment using : pip install virtualenvwrapper-win
+
+  creating virtual environment : python -m venv myenv
+
+  activating the virtaul environment : .\myenv\Scripts\activate
+
+  We are done with our virtaul environment now we have to setup django
+
+  instll django : pip install Django
+
+  creating project  : django-admin startproject FURNI 
+ project has been created move to the project : cd furni
+
+ lets test the project is running or not using : python manage.py runserver
+
+ creating app : python manage.py startapp furniapp
+
+ we have to mapped the urls in app for that we have to create the urls.py
+
+ In urls.py file we haved define the home page as index.html 
+ the we have to define the index function in views to render or display message 
+
+ but if we want to go home page we have to define in project urls also about the new app furniapp :  path('', include ("furniapp.urls")), 
+ for that we have imported include along with path
+
+ and the website is rendering to the index page but it is not rendering because we haved to define in settings.py file the template directory
+'DIRS': [os.path.join(BASE_DIR,'templates')],
+
+ now we have to link the css and other static files 
+ 
+STATICFILES_DIRS=[
+    os.path.join(BASE_DIR,'static')
+]
+STATIC_ROOT = os.path.join(BASE_DIR,'assets')
+
+now create folder static and paste all folder like css js
+
+run command to : python manage.py collectstatic
+
+now we are ready with the css, js other static files but it doesnt affect the index.files because we have to make all the links static in index.html  using jinja format
+1. {% load static %}
+2. make the all the links static by : href="{% static 'favicon.png'%} "
+
+we are able to see the changes and mapped all the links
+
+for images : 
+        for img we should define : {% static "img/place" as baseUrl %}
+        static and path as baseUrl as variable
+        <img src="{{ baseUrl }}/{{ dest.img }}" alt="asfasdfasdfadf">
+
+Lets define the database 
+In settings.py file database secttion :
+
+        'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'furnitureDetails',
+        'USER': 'root',
+        'PASSWORD': 'zxcvbnm1234567890$',
+        'HOST':'localhost',
+        'PORT':'3306' 
+            }
+ 
+and download MySQLclient : pip install mysqlclient
+
+define models : 
+        class furniture(models.Model):
+    name = models.CharField (max_length=100)
+    # img would be upload it will not stored in database so we have to path here to access
+    img = models.ImageField(upload_to='pics')
+    price = models.IntegerField()
+    offer = models.BooleanField(default=False)
+
+we have to declare our application name in settings.py : 
+    # defnine app
+    'furniapp.apps.FurniappConfig'
+
+created meet with an error like cannot use ImageFeild because Pillow is not installed
+    pip install Pillow
+
+Now we are done with the model now we have to migrate it with database by :  python manage.py makemigrations
+
+migrations created with : 
+         furniapp\migrations\0001_initial.py
+        - Create model furniture
+To migrate we haved run command : python manage.py sqlmigrate travello 0001
+
+        -- 
+        -- Create model furniture
+        --
+        CREATE TABLE `furniapp_furniture` (`id` bigint AUTO_INCREMENT NOT NULL PRIMARY KEY, `name` varchar(100) NOT NULL, `img` varchar(100) NOT NULL, `price` integer NOT NULL, `offer` bool NOT NULL);
+
+
+it have created an query to create table and then run command : python manage.py migrate 
+To applay changes
+created table successfully
+
+lets create the admin panel to add furnitureDetails
+
+ now by url : localhost:8000/admin 
+we can access administrator page and it will asked for authentication and we dont have username and password 
+
+and to access that page we have to create super user : python manage.py createsuperuser
+
+superuser created successfully : admin
+
+
+Now we want to add furniture by admin portal 
+
+It can be done just by registering the furniture model in admin.py 
+ from .models import furniture
+# Register your models here.
+admin.site.register(furniture)
+
+
+
+************ Add and Fetch data from Database ************
+
+to add images from database we have to create folder media which will store the uploaded images
+In setting.py define Media_root and assign path of media folder
+
+MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+
+
+We have to specify the url we are going to use in views
+
+
+# In to make images dynamic we are creating folder media and storing the images which are uploaded
+urlpatterns = urlpatterns + static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
+
+to resolve th error
+from django.conf import settings
+from django.conf.urls.static import static
+
+create object dest and pass :         furni= furniture.objects.all()
+
+we are getting all details except img because the declared is for static data 
+
+for dynamic : 
+<img src="{{ dest.img.url }}" >
+for global url 
+
+
+**************** making all links working *************
+adding others remaining link of about,shop,services,contact us etc 
