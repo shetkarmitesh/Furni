@@ -150,3 +150,19 @@ for global url
 **************** making all links working *************
 adding others remaining link of about,shop,services,contact us etc 
 
+for rendering from index to about, shop we have  to decalare in app/urls.py about the page and in index file : <li><a class="nav-link" href="{% url 'about'%}">About us</a></li>
+    href="{% url 'about'%}"
+all urls mapping is done 
+
+Tommorow we will do the dyanmic part for  furnitureDetails
+
+
+
+Icons were not visible because the 
+		<link href =  "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+this link of font awesome was made static 
+
+we are done with testimonails dynamic team members dynamic content 
+
+now wroking on login register 
+created login and register option in index.html and passing the url

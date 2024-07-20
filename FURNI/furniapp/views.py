@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from .models import furniture
+from .models import furniture,Team_Members
 # //importing models
 # Create your views here.
 
@@ -27,19 +27,32 @@ def index(request):
     # return render(request,'index.html',{'furni':furni})
 
     furni= furniture.objects.all()
-    return render(request,'index.html',{'furni':furni})
+    team_members = Team_Members.objects.all()
 
+    return render(request,'index.html',{'furni':furni,'team_members':team_members})
+def login(request):
+    return render (request,'login.html')
+
+def register(request):
+    return render (request,'register.html')
 def about(request):
-    return render(request,'about.html')
+    team_members = Team_Members.objects.all()
+    return render(request,'about.html',{'team_members':team_members})
 
 def shop(request):
-    return render(request,'shop.html')
+    furni= furniture.objects.all()
+    return render(request,'shop.html',{'furni':furni})
 
 def services(request):
-    return render(request,'services.html')
+    furni= furniture.objects.all()
+    team_members = Team_Members.objects.all()
+
+    return render(request,'services.html',{'furni':furni,'team_members':team_members})
 
 def blog(request):
-    return render(request,'blog.html')
+    team_members = Team_Members.objects.all()
+
+    return render(request,'blog.html',{'team_members':team_members})
 
 def contact(request):
     return render(request,'contact.html')
@@ -49,3 +62,4 @@ def checkout(request):
     return render(request,'checkout.html')
 def thankyou(request):
     return render(request,'thankyou.html')
+

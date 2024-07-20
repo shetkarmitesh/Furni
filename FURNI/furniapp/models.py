@@ -14,3 +14,11 @@ class furniture(models.Model):
     img = models.ImageField(upload_to='pics')
     price = models.IntegerField()
     offer = models.BooleanField(default=False)
+    
+class Team_Members(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    position = models.CharField(max_length=100)
+    description = models.CharField(max_length=100)
+    ExecutiveTestimonials = models.CharField(max_length=300,null=True)
+    img = models.ImageField(upload_to='team_members')
