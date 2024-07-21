@@ -1,6 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models import furniture,Team_Members
+from django.contrib.auth.models import User,auth
+from django.contrib import messages
+
 # //importing models
 # Create your views here.
 
@@ -30,11 +33,8 @@ def index(request):
     team_members = Team_Members.objects.all()
 
     return render(request,'index.html',{'furni':furni,'team_members':team_members})
-def login(request):
-    return render (request,'login.html')
 
-def register(request):
-    return render (request,'register.html')
+
 def about(request):
     team_members = Team_Members.objects.all()
     return render(request,'about.html',{'team_members':team_members})
@@ -63,3 +63,58 @@ def checkout(request):
 def thankyou(request):
     return render(request,'thankyou.html')
 
+def logout (request):
+    auth.logout(request)
+    return render(request,'index.html')
+def login(request):
+    if request.method=="POST":
+        # fetching the data from form
+        username = request.POST['username']
+        password = request.POST['pwd']
+        user = auth.authenticate(username=username ,password=password)
+        if user is not None: 
+            auth.login(request,user)
+            return redirect('/')
+        else: 
+            messages.info(request,"invalid credentails")
+            redirect('login')
+    return render (request,'login.html')
+
+
+def register(request):
+    if request.method=="POST":
+        # fetching the data from form
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        username = request.POST['username']
+        email = request.POST['email']
+        password1 = request.POST['pwd1']
+        password2= request.POST['pwd2']
+
+        # adding the data to database
+        if password1==password2:
+            if User.objects.filter(username=username).exists():
+                # print("username taknen ")
+                messages.info(request, "The username is taken")
+                # return render(request,'register.html')
+                return redirect('register')
+                
+            elif User.objects.filter(email=email).exists():
+                # print("user already exists")
+                messages.info(request, "The user is alredy taken")
+                return redirect('register')
+
+                # return render(request,'register.html')
+
+            user = User.objects.create_user(username=username,password=password1,email=email,first_name=first_name,last_name=last_name)
+            user.save()
+            # print("user created successfully***********")
+            messages.info(request, "user created successfully")
+            return redirect('login')
+        else: 
+            # print("password not matching")
+            messages.info(request, "password not matching")
+            redirect('register')
+
+    else:
+        return render(request,'register.html') 

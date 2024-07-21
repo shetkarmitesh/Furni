@@ -4,9 +4,9 @@
     box-sizing: border-box;
 }
 body{
-    background: linear-gradient(to right,#3a7bd5,#3a6073);
-    font-family: "Raleway",sans-serif;
-    height: 100vh;
+    /* background: linear-gradient(to right,#3a7bd5,#3a6073); */
+    /* font-family: "Raleway",sans-serif;
+    height: 100vh; */
 }
 .center{
     position: absolute;

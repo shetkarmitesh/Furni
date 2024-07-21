@@ -166,3 +166,9 @@ we are done with testimonails dynamic team members dynamic content
 
 now wroking on login register 
 created login and register option in index.html and passing the url
+
+
+model making
+
+						<li><div class="center"><button type="button"  data-toggle="modal" data-target="#show-login">Login</button></div>
+

@@ -22,3 +22,10 @@ class Team_Members(models.Model):
     description = models.CharField(max_length=100)
     ExecutiveTestimonials = models.CharField(max_length=300,null=True)
     img = models.ImageField(upload_to='team_members')
+
+# class User(models.Model):
+#     first_name = models.CharField(max_length=100)
+#     last_name = models.CharField(max_length=100)
+#     email = models.CharField(max_length=100)
+#     username = models.CharField(max_length=100)
+#     password = models.CharField(max_length=100)

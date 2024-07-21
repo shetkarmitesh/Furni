@@ -1,11 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    hii
-</body>
-</html>
+{% extends "base.html" %}
+{% load static %}
+
+{% block mainsection %}
+
+        <div style="margin-top: 2em;">
+
+            <form action="register" method="post">
+              {% csrf_token %}
+                <div class="container">
+                    <h1>Log In</h1>
+                    <hr>
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" name="first_name" id="a" placeholder="First Name" required>
+                        <label for="first_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" name="last_name" id="a" placeholder="Last Name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput2" class="form-label">Email address</label>
+                        <input type="text" class="form-control" name="email" id="exampleFormControlInput2" placeholder="name@example.com" required>
+                        <label for="exampleFormControlInput2" class="form-label">Username</label>
+                        <input type="text" class="form-control" name="username" id="exampleFormControlInput2" placeholder="Username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                        <input type="password" class="form-control" name="pwd1" id="exampleInputPassword1" placeholder="Password" required>
+                        <label for="exampleInputPassword2" class="form-label">Confirm Password</label>
+                        <input type="password" class="form-control" name="pwd2" id="exampleInputPassword1" placeholder="Confirm Password" required>
+                    </div>
+
+                    <input type="submit" class="btn btn-success" style="width: 10em;" value="Log In">
+                    
+                  </div>
+                
+            </form>
+        </div>
+{% endblock mainsection %}
