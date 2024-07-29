@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block mainsection %}
+{% load static %}
+{% static "images" as baseUrl %}
+
+
+
+<!-- Start Product Section -->
+<div class="product-section">
+    <div class="container">
+        <div class="row">
+            <!-- Start Column 1 -->
+            <div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
+                <h2 class="mb-4 section-title">Crafted with excellent material.</h2>
+                <p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam
+                    vulputate velit imperdiet dolor tempor tristique. </p>
+                    <p><a href="{% url 'shop'%}" class="btn">Explore</a></p>
+                </div>
+                <!-- End Column 1 -->
+                
+              
+                <!-- making the furniture list dyanmic -->
+            {% for furniture in page_obj%}
+            <!-- Start Column 2 -->
+            <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+                <a class="product-item" href="{% url 'cart'%}">
+                    <!-- for static images -->
+                    <!-- <img src="{{ baseUrl }}/{{ furniture.img }}" class="img-fluid product-thumbnail"> -->
+                    <!-- for dynamic images from database -->
+                    <img src="{{ furniture.img.url }}" class="img-fluid product-thumbnail">
+                    <!-- <img src="{% static 'images/product-1.png'%}" class="img-fluid product-thumbnail"> -->
+                    <h3 class="product-title">{{furniture.name}}</h3>
+                    <strong class="product-price">${{furniture.price}}</strong>
+
+                    <span class="icon-cross">
+                        <img src="{% static 'images/cross.svg'%}" class="img-fluid">
+                    </span>
+                </a>
+            </div>
+            <!-- End Column 2 -->
+
+            {%endfor%}
+
+        </div>
+    </div>
+</div>
+<!-- End Product Section -->
+<div class="pagination">
+    <span class="step-links">
+        {% if page_obj.has_previous %}
+            <a href="?page=1">&laquo; first</a>
+            <a href="?page={{ page_obj.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+        {% endif %}
+    </span>
+</div>
+
+{% endblock mainsection %}

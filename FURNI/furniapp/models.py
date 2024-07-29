@@ -23,9 +23,17 @@ class Team_Members(models.Model):
     ExecutiveTestimonials = models.CharField(max_length=300,null=True)
     img = models.ImageField(upload_to='team_members')
 
+class Cart_Item(models.Model):
+    name = models.CharField (max_length=100)
+    price = models.IntegerField()
+    offer = models.BooleanField(default=False)
+    img = models.ImageField(upload_to='orders')
+    
+
 # class User(models.Model):
 #     first_name = models.CharField(max_length=100)
 #     last_name = models.CharField(max_length=100)
 #     email = models.CharField(max_length=100)
 #     username = models.CharField(max_length=100)
 #     password = models.CharField(max_length=100)
+

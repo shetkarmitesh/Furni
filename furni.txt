@@ -171,4 +171,12 @@ created login and register option in index.html and passing the url
 model making
 
 						<li><div class="center"><button type="button"  data-toggle="modal" data-target="#show-login">Login</button></div>
+// we will see that part further
 
+done with mapping of Login, logout, register 
+
+Encountering th error as we are rendering to pages like shop ,services etc but on webpage it highlights the part of home not updating as per the page
+
+
+
+lets do the part of verifying the password and confirm password

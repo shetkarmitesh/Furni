@@ -4,6 +4,9 @@ from .models import furniture,Team_Members
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 
+# pagination
+from django.core.paginator import Paginator
+
 # //importing models
 # Create your views here.
 
@@ -54,8 +57,9 @@ def blog(request):
 
     return render(request,'blog.html',{'team_members':team_members})
 
-def contact(request):
+def contactUs(request):
     return render(request,'contact.html')
+
 def cart(request):
     return render(request,'cart.html')
 def checkout(request):
@@ -109,12 +113,31 @@ def register(request):
             user = User.objects.create_user(username=username,password=password1,email=email,first_name=first_name,last_name=last_name)
             user.save()
             # print("user created successfully***********")
-            messages.info(request, "user created successfully")
+            # messages.info(request, "user created successfully")
             return redirect('login')
         else: 
             # print("password not matching")
             messages.info(request, "password not matching")
-            redirect('register')
+            return redirect('register')
 
     else:
         return render(request,'register.html') 
+
+
+def addToCart(request,id):
+    
+
+    return redirect('shop')
+
+
+
+# def listing(request):
+#     contact_list = furniture.objects.all()
+#     paginator = Paginator(contact_list, 4)  # Show 25 contacts per page.
+
+#     page_number = request.GET.get("page")
+#     page_obj = paginator.get_page(page_number)
+#     return render(request, "try.html", {"page_obj": page_obj,'furni':contact_list})
+    
+# # def try1(request):
+# #     return render(request,"try.html")
