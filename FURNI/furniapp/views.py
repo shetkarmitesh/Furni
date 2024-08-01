@@ -1,12 +1,13 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from .models import furniture,Team_Members
+from .models import furniture,Team_Members,Cart_Item
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
 # pagination
 from django.core.paginator import Paginator
-
+# to display alerts
+import sweetify
 # //importing models
 # Create your views here.
 
@@ -60,16 +61,17 @@ def blog(request):
 def contactUs(request):
     return render(request,'contact.html')
 
-def cart(request):
-    return render(request,'cart.html')
+
 def checkout(request):
     return render(request,'checkout.html')
+
 def thankyou(request):
     return render(request,'thankyou.html')
 
 def logout (request):
     auth.logout(request)
     return render(request,'index.html')
+
 def login(request):
     if request.method=="POST":
         # fetching the data from form
@@ -123,21 +125,57 @@ def register(request):
     else:
         return render(request,'register.html') 
 
+@login_required
+def add_to_cart(request, product_id):
+    product = furniture.objects.get(id=product_id)
+    quantity =1
+    price = product.price
+    # total = quantity * price
 
-def addToCart(request,id):
-    
+# Check if the item already exists in the cart for the current user
+    if not Cart_Item.objects.filter(product_id=product_id, customer=request.user).exists():
+        # Create a new cart item if it doesn't exist
+        cart_item = Cart_Item.objects.create(
+                product=product,
+                customer=request.user,
+                quantity=quantity,
+                productName=product.name,
+                price=price,
+                img= product.img,
+            )
+        cart_item.save()
+    else:
+        # Update existing cart item quantity
+        cart_item = Cart_Item.objects.get(id=product_id)
+        cart_item.quantity+=1
+        # print(quantity)
+        cart_item.save()
 
+    # messages.info(request,"{} is added successfully".format(product.name))
+    sweetify.success(request, 'Item Added', timer=1000)
     return redirect('shop')
-
-
-
-# def listing(request):
-#     contact_list = furniture.objects.all()
-#     paginator = Paginator(contact_list, 4)  # Show 25 contacts per page.
-
-#     page_number = request.GET.get("page")
-#     page_obj = paginator.get_page(page_number)
-#     return render(request, "try.html", {"page_obj": page_obj,'furni':contact_list})
+@login_required
+def cart(request):
+    cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
     
-# # def try1(request):
-# #     return render(request,"try.html")
+    return render(request,'cart.html',{'cart_details':cart_details})
+@login_required
+def remove_cart_item(request,cart_id):
+    cart_item = Cart_Item.objects.filter(id=cart_id, customer=request.user)
+    if cart_item.exists():
+        cart_item.delete()
+    else:
+        print("product not found ")
+    sweetify.success(request, 'Item Deleted', timer=1000)
+    return redirect('cart')
+
+def update_cart_item(request,cart_id,quantity):
+    print(quantity)
+    cart_item = Cart_Item.objects.filter(id=cart_id, customer=request.user)
+    if cart_item.exists():
+        cart_item.quantity= quantity
+        cart_item.update()
+    else:
+        print("product not found ")
+    sweetify.success(request, 'Item Updated', timer=1000)
+    return redirect('cart')

@@ -168,10 +168,12 @@ now wroking on login register
 created login and register option in index.html and passing the url
 
 
-model making
+**************modal making***********
 
-						<li><div class="center"><button type="button"  data-toggle="modal" data-target="#show-login">Login</button></div>
+<li><div class="center"><button type="button"  data-toggle="modal" data-target="#show-login">Login</button></div>
 // we will see that part further
+
+
 
 done with mapping of Login, logout, register 
 
@@ -179,4 +181,60 @@ Encountering th error as we are rendering to pages like shop ,services etc but o
 
 
 
-lets do the part of verifying the password and confirm password
+lets do the part of verifying the password and confirm password : done
+
+
+************** Add item to cart *******************
+***** create Ooperation ******
+In the furniture list we are having an anchor tag for adding item to cart so we use it to add it in cart by redering that page to to addToCart with furniture id like
+<a class="product-item" href="{% url 'add_to_cart' furniture.id %} ">
+with url we can pass id   
+Then we have mapped the url and defined add_to_cart function in view 
+Only login users should able to add items to cart so we have used : @login_required
+it will denied access and throw error if without login user tries to add items 
+
+to store the items we have created model name as Cart_Item where we have passed the product and customer details using the foriegn key 
+def __str__(self):
+        # return f'{self.customer} | {self.quantity} x {self.productName}'
+        return f'{self.customer}'
+it used to show the headline in admin portale for cart_item object
+
+Then we have checked that item is already added in the cart or not 
+now then we want to pass the message that item is added successfully
+for that we have found the about the sweetalert library  :  https://github.com/Atrox/sweetify-django
+for that we have install : pip install sweetify
+In settings.py  installed apps ':  sweetify',
+In html code  : Next add the following lines to the bottom of your layout/base template:
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
+
+        {% load sweetify %}
+        {% sweetify %}
+IN views.py : 
+            import sweetify
+            sweetify.success(request, 'Item Added', timer=1000)
+
+Done with the alert 
+
+************ Now manage the cart ****************
+
+***** Read Ooperation ******
+now to display the cart items on cart.html of login user we required users id which will get by request.user.id
+using that we will fetch the data of selected items
+and dispalied that data in cart.html 
+
+***** Delete Ooperation ******
+Now to delete the selected cart we ahave an anchor tag so by midifying it as 
+         <td><a href="{% url 'remove_cart_item' cart_detail.id %} " class="btn btn-black btn-sm">X</a></td>
+
+passed the item id to delete fetech and delete that item
+         cart_item = Cart_Item.objects.filter(id=cart_id, customer=request.user)
+        if cart_item.exists():
+        cart_item.delete()
+***** Update Ooperation ******
+for that we will require the item id and the quantity updated
+we have button update cart : <button class="btn btn-black btn-sm btn-block" onclick="location.href='/update_cart_item/{{cart_detail.id}}/{{valueId}}/'">Update Cart</button>
+where we have to pass the multiple values traditional was incomplete so we have new way to pass the values 
+now the updated the values are not getting us for that :
+    I guess mithun dada has implemented that part
+
+

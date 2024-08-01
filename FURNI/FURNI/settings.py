@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # defnine app
-    'furniapp.apps.FurniappConfig'
+    'furniapp.apps.FurniappConfig',
+    'sweetify'
 
 ]
 

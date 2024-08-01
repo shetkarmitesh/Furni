@@ -7,7 +7,6 @@ urlpatterns = [
      path('about', views.about,name="about"),
      path('shop', views.shop,name="shop"),
      path('contactUs', views.contactUs,name="contactUs"),
-    
      path('blog', views.blog,name="blog"),
      path('cart', views.cart,name="cart"),
      path('services', views.services,name="services"),
@@ -16,12 +15,9 @@ urlpatterns = [
      path('register', views.register,name="register"),
      path('login', views.login,name="login"),
      path('logout', views.logout,name="logout"),
-     # path('asd', views.asd,name="asd"),
-
-     path ('addToCart',views.addToCart,name='addToCart')
-     # path ('try',views.try1,name='try'),
-     # path ('listing',views.listing,name='listing'),
-     
+     path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'), 
+     path('remove_cart_item/<int:cart_id>/', views.remove_cart_item, name='remove_cart_item'), 
+     path('update_cart_item/<int:cart_id>/<int:quantity>/',views.update_cart_item, name='update_cart_item'), 
 
 ]
 

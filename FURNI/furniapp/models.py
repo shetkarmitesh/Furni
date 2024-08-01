@@ -1,5 +1,6 @@
 from django.db import models
-
+import datetime 
+from django.contrib.auth.models import User
 # Create your models here.
 
 # class furniture:
@@ -24,16 +25,19 @@ class Team_Members(models.Model):
     img = models.ImageField(upload_to='team_members')
 
 class Cart_Item(models.Model):
-    name = models.CharField (max_length=100)
+    product = models.ForeignKey(furniture,on_delete=models.CASCADE,default=1) 
+    customer = models.ForeignKey(User, on_delete=models.CASCADE,default=1) 
+    quantity = models.IntegerField(default=1) 
+    productName = models.CharField (max_length=100,default="")
     price = models.IntegerField()
     offer = models.BooleanField(default=False)
     img = models.ImageField(upload_to='orders')
-    
+    address = models.CharField(max_length=50, default='', blank=True) 
+    phone = models.CharField(max_length=50, default='', blank=True) 
+    date = models.DateField(default=datetime.datetime.today) 
+    status = models.BooleanField(default=False) 
+    def __str__(self):
+        # return f'{self.customer} | {self.quantity} x {self.productName}'
+        return f'{self.customer}'
 
-# class User(models.Model):
-#     first_name = models.CharField(max_length=100)
-#     last_name = models.CharField(max_length=100)
-#     email = models.CharField(max_length=100)
-#     username = models.CharField(max_length=100)
-#     password = models.CharField(max_length=100)
 

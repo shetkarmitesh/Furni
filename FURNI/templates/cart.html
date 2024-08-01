@@ -38,68 +38,50 @@
                           <th class="product-remove">Remove</th>
                         </tr>
                       </thead>
+                      <!-- Product 1 Started -->
+                       {% for cart_detail in cart_details%}
+                       <!-- <h2>{{cart_detail.productName}}</h2> -->
                       <tbody>
                         <tr>
                           <td class="product-thumbnail">
-                            <img src="{% static 'images/product-1.png'%}" alt="Image" class="img-fluid">
+                            <img src="{{ cart_detail.img.url }}" alt="Image" class="img-fluid">
                           </td>
                           <td class="product-name">
-                            <h2 class="h5 text-black">Product 1</h2>
+                            <h2 class="h5 text-black">{{cart_detail.productName}}</h2>
                           </td>
-                          <td>$49.00</td>
+                          <td>${{cart_detail.price}}</td>
                           <td>
                             <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
                               <div class="input-group-prepend">
                                 <button class="btn btn-outline-black decrease" type="button">&minus;</button>
                               </div>
-                              <input type="text" class="form-control text-center quantity-amount" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
+                              <input type="number" class="form-control text-center quantity-amount" value="{{cart_detail.quantity}}" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
                               <div class="input-group-append">
                                 <button class="btn btn-outline-black increase" type="button">&plus;</button>
                               </div>
                             </div>
         
                           </td>
-                          <td>$49.00</td>
-                          <td><a href="#" class="btn btn-black btn-sm">X</a></td>
+                          <td>${{cart_detail.price}}</td>
+                          <td><a href="{% url 'remove_cart_item' cart_detail.id %} " class="btn btn-black btn-sm">X</a></td>
                         </tr>
-        
-                        <tr>
-                          <td class="product-thumbnail">
-                            <img src="{% static 'images/product-2.png'%}" alt="Image" class="img-fluid">
-                          </td>
-                          <td class="product-name">
-                            <h2 class="h5 text-black">Product 2</h2>
-                          </td>
-                          <td>$49.00</td>
-                          <td>
-                            <div class="input-group mb-3 d-flex align-items-center quantity-container" style="max-width: 120px;">
-                              <div class="input-group-prepend">
-                                <button class="btn btn-outline-black decrease" type="button">&minus;</button>
-                              </div>
-                              <input type="text" class="form-control text-center quantity-amount" value="1" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1">
-                              <div class="input-group-append">
-                                <button class="btn btn-outline-black increase" type="button">&plus;</button>
-                              </div>
-                            </div>
-        
-                          </td>
-                          <td>$49.00</td>
-                          <td><a href="#" class="btn btn-black btn-sm">X</a></td>
-                        </tr>
+                        <!-- Product 1 ended -->
+                        
+                        {%endfor%}
                       </tbody>
                     </table>
                   </div>
                 </form>
               </div>
-        
+              
               <div class="row">
                 <div class="col-md-6">
                   <div class="row mb-5">
                     <div class="col-md-6 mb-3 mb-md-0">
-                      <button class="btn btn-black btn-sm btn-block">Update Cart</button>
+                      <button class="btn btn-black btn-sm btn-block" onclick="location.href='/update_cart_item/{{cart_detail.id}}/{{valueId}}/'">Update Cart</button>
                     </div>
                     <div class="col-md-6">
-                      <button class="btn btn-outline-black btn-sm btn-block">Continue Shopping</button>
+                      <button class="btn btn-outline-black btn-sm btn-block" onclick="location.href='/shop'">Continue Shopping</button>
                     </div>
                   </div>
                   <div class="row">
@@ -151,5 +133,8 @@
               </div>
             </div>
           </div>
-		
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
+
+          {% load sweetify %}
+          {% sweetify %}
 		  {% endblock mainsection %}

@@ -30,7 +30,7 @@
 					{% for furniture in furni%}
 					<!-- Start Column 2 -->
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<!-- <a class="product-item" href="{% url 'addToCart'%} furniture.id"> -->
+						<a class="product-item" href="{% url 'add_to_cart' furniture.id %} ">
 							<!-- for static images -->
 							<!-- <img src="{{ baseUrl }}/{{ furniture.img }}" class="img-fluid product-thumbnail"> -->
 							 <!-- for dynamic images from database -->
@@ -51,6 +51,9 @@
 		      	</div>
 		    </div>
 		</div>
+		
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
 
-
+{% load sweetify %}
+{% sweetify %}
 		{% endblock mainsection %}
