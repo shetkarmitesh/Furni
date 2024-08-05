@@ -36,6 +36,7 @@ class Cart_Item(models.Model):
     phone = models.CharField(max_length=50, default='', blank=True) 
     date = models.DateField(default=datetime.datetime.today) 
     status = models.BooleanField(default=False) 
+    total = models.FloatField(default = 0.0)
     def __str__(self):
         # return f'{self.customer} | {self.quantity} x {self.productName}'
         return f'{self.customer}'

@@ -235,6 +235,34 @@ for that we will require the item id and the quantity updated
 we have button update cart : <button class="btn btn-black btn-sm btn-block" onclick="location.href='/update_cart_item/{{cart_detail.id}}/{{valueId}}/'">Update Cart</button>
 where we have to pass the multiple values traditional was incomplete so we have new way to pass the values 
 now the updated the values are not getting us for that :
-    I guess mithun dada has implemented that part
+we can use the ajax or jquery to update the quantity in the database 
+In custom.js we have created a click function to fetch the quantity and product id and to send the data to update_cart_item 
 
 
+
+$('.change_qauntity').click(function (e) {
+	e.preventDefault();
+	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
+	var product_quantity = $(this).closest(('.product_data')).find('.product_quantity').val();
+	var token = $('input[name = csrfmiddlewaretoken]').val();
+	console.log("hiii");
+	$.ajax({
+			method :"POST",
+			url : "/update_cart_item",
+			data : {
+			  'product_id':product_id,
+			  'product_qty':product_quantity,
+			  csrfmiddlewaretoken: token
+			},success : function(response){
+			 
+			}
+		  });
+
+where the change_qauntity is the class assign to the buttons of increasing and decreasing items : <button class="btn btn-outline-black change_qauntity decrease" type="button">&minus;</button>
+in the main class product_data the product search the required data closed to the main class and serches class product_id,quantity and csrf token to bypass the url
+In the ajax format we haved call the method , passed the url and data ;
+
+Updated the update , continue and total price and rediect to the checkout
+
+************* checkout Page **************
+Working on  Your Order for that fetching the order details from order models

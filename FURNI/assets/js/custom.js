@@ -32,11 +32,12 @@
     		quantity = document.getElementsByClassName('quantity-container');
 
 		function createBindings(quantityContainer) {
-	      var quantityAmount = quantityContainer.getElementsByClassName('quantity-amount')[0];
+	      var product_quantity = quantityContainer.getElementsByClassName('product_quantity')[0];
+	      var product_id = quantityContainer.getElementsByClassName('product_id')[0];
 	      var increase = quantityContainer.getElementsByClassName('increase')[0];
 	      var decrease = quantityContainer.getElementsByClassName('decrease')[0];
-	      increase.addEventListener('click', function (e) { increaseValue(e, quantityAmount); });
-	      decrease.addEventListener('click', function (e) { decreaseValue(e, quantityAmount); });
+	      increase.addEventListener('click', function (e) { increaseValue(e,product_id, product_quantity); });
+	      decrease.addEventListener('click', function (e) { decreaseValue(e,product_id, product_quantity); });
 	    }
 
 	    function init() {
@@ -45,23 +46,46 @@
 	        }
 	    };
 
-	    function increaseValue(event, quantityAmount) {
-	        value = parseInt(quantityAmount.value, 10);
-
-	        console.log(quantityAmount, quantityAmount.value);
+	    function increaseValue(event, product_id,product_quantity) {
+	        value = parseInt(product_quantity.value, 10);
+            product_id = parseInt(product_id);
+            // var token = $ ('input[name = csrfmiddlewaretoken]').val();
+	        console.log(product_quantity, product_quantity.value);
 
 	        value = isNaN(value) ? 0 : value;
 	        value++;
-	        quantityAmount.value = value;
+	        product_quantity.value = value;
+            // $.ajax({
+            //     method :"post",
+            //     url : "/update_cart_item",
+            //     data : {
+            //       'product_id':product_id,
+            //       'product_qty':value,
+            //     //   csrfmiddlewaretoken: token
+            //     },success : function(response){
+            //       alertify.success(response.status)
+            //     }
+            //   });
+            // $.ajax({
+            //     type: 'POST',
+            //     url: '/update_cart_item/',
+            //     data: JSON.stringify({ 'name': 'John', 'age': 30 }),
+            //     contentType: 'application/json',
+            //     success: function(response) {
+            //       console.log(response); // Handle the response from the view
+            //     }
+            //   });
+           
+           
 	    }
 
-	    function decreaseValue(event, quantityAmount) {
-	        value = parseInt(quantityAmount.value, 10);
+	    function decreaseValue(event,product_id, product_quantity) {
+	        value = parseInt(product_quantity.value, 10);
 
 	        value = isNaN(value) ? 0 : value;
 	        if (value > 0) value--;
 
-	        quantityAmount.value = value;
+	        product_quantity.value = value;
 	    }
 	    
 	    init();
@@ -70,4 +94,28 @@
 	sitePlusMinus();
 
 
+	
+	
 })()
+$('.try').click(function myFunction() {
+	alert("Hello! I am an alert box!");
+  });
+
+$('.change_qauntity').click(function (e) {
+	e.preventDefault();
+	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
+	var product_quantity = $(this).closest(('.product_data')).find('.product_quantity').val();
+	var token = $('input[name = csrfmiddlewaretoken]').val();
+	console.log("hiii");
+	$.ajax({
+			method :"POST",
+			url : "/update_cart_item",
+			data : {
+			  'product_id':product_id,
+			  'product_qty':product_quantity,
+			  csrfmiddlewaretoken: token
+			},success : function(response){
+			 
+			}
+		  });
+})

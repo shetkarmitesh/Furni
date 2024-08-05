@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # defnine app
     'furniapp.apps.FurniappConfig',
-    'sweetify'
+    'sweetify',
+    'jquery'
 
 ]
 
