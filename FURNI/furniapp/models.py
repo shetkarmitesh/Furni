@@ -35,10 +35,32 @@ class Cart_Item(models.Model):
     address = models.CharField(max_length=50, default='', blank=True) 
     phone = models.CharField(max_length=50, default='', blank=True) 
     date = models.DateField(default=datetime.datetime.today) 
-    status = models.BooleanField(default=False) 
     total = models.FloatField(default = 0.0)
+    # totalAmount = models.FloatField(default = 0.0)        
     def __str__(self):
         # return f'{self.customer} | {self.quantity} x {self.productName}'
         return f'{self.customer}'
+
+class Order (models.Model):
+    class statsType (models.TextChoices):
+        Pending = 'Pending'
+        Placed = 'Placed'
+        Delivered = 'Delivered'
+    # Cart_Item = models.ForeignKey(Cart_Item,on_delete=models.CASCADE)
+    Cart_Item = models.ManyToManyField(Cart_Item)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    streetAddress = models.CharField(max_length=100)
+    optionalAddress = models.CharField(max_length=100)
+    Country = models.CharField(max_length=50)
+    email = models.EmailField(max_length=254)
+    phoneNo = models.IntegerField()
+    posta_Zip = models.CharField(max_length=50)
+    OrderNotes = models.CharField(max_length=500)
+    status = models.CharField(max_length=10,choices=statsType.choices,default=statsType.Pending) 
+
+        
 
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
-from .models import furniture,Team_Members,Cart_Item
+from .models import furniture,Team_Members,Cart_Item,Order
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -63,8 +63,6 @@ def contactUs(request):
 
 
 
-def thankyou(request):
-    return render(request,'thankyou.html')
 
 def logout (request):
     auth.logout(request)
@@ -145,7 +143,7 @@ def add_to_cart(request, product_id):
         cart_item.save()
     else:
         # Update existing cart item quantity
-        cart_item = Cart_Item.objects.get(id=product_id)
+        cart_item = Cart_Item.objects.get(product_id=product_id)
         cart_item.quantity+=1
         cart_item.total = price*cart_item.quantity
         # print(quantity)
@@ -160,6 +158,7 @@ def cart(request):
     total_cart_price=0
     for i in cart_details : 
         total_cart_price = i.total + total_cart_price
+    cart_details.totalAmount = total_cart_price
     return render(request,'cart.html',{'cart_details':cart_details,'total_cart_price':total_cart_price})
 @login_required
 def remove_cart_item(request,cart_id):
@@ -191,4 +190,47 @@ def update_cart_item(request):
 def checkout(request):
     cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
 
-    return render(request,'checkout.html',{'cart_details':cart_details})
+    total_cart_price=0.0
+    for i in cart_details : 
+        total_cart_price = i.total + total_cart_price
+
+   
+    return render(request,'checkout.html',{'cart_details':cart_details,'total_cart_price':total_cart_price})
+
+def thankyou(request):
+    if request.method == "POST":
+        
+        first_name = request.POST['c_fname']
+        last_name = request.POST['c_lname']
+        address = request.POST['c_address']
+        addressOptional = request.POST['c_addressOptional']
+        state = request.POST['c_state_country']
+        posta = request.POST['c_postal_zip']
+        email = request.POST['c_email_address']
+        orderNotes = request.POST['c_order_notes']
+        phoneNo = int(request.POST['c_phone'])
+        totalAmount = float(request.POST['c_order_total'])
+
+        cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
+        cart[len(cart_details)] = cart_details
+        print(len(cart))
+        for i in cart:
+            print(i.productName)
+        order= Order.objects.create(
+                    Cart_Item=cart_details,
+                    user=request.user,
+                    amount= totalAmount,
+                    first_name = first_name,
+                    last_name = last_name,
+                    streetAddress =address,
+                    optionalAddress =addressOptional,
+                    Country =state,
+                    email =email,
+                    phoneNo =phoneNo,
+                    posta_Zip =posta,
+                    OrderNotes =orderNotes,
+                    # status = 'Placed'
+                )
+        order.save()
+        # cart_details.delete()
+    return render(request,'thankyou.html')

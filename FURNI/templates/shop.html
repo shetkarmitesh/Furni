@@ -25,12 +25,16 @@
 		<div class="untree_co-section product-section before-footer-section">
 		    <div class="container">
 		      	<div class="row">
-					
 					<!-- making the furniture list dyanmic -->
 					{% for furniture in furni%}
 					<!-- Start Column 2 -->
+
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+						{% if user.is_authenticated %}
 						<a class="product-item" href="{% url 'add_to_cart' furniture.id %} ">
+							{%else%}
+							<a class="product-item" href="{% url 'login'%} ">
+							{% endif %}
 							<!-- for static images -->
 							<!-- <img src="{{ baseUrl }}/{{ furniture.img }}" class="img-fluid product-thumbnail"> -->
 							 <!-- for dynamic images from database -->

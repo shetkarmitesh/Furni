@@ -266,3 +266,12 @@ Updated the update , continue and total price and rediect to the checkout
 
 ************* checkout Page **************
 Working on  Your Order for that fetching the order details from order models
+
+
+
+
+
+Pagination
+
+
+if  cart items is zero not to be shown checkout page 
