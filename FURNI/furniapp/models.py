@@ -47,7 +47,7 @@ class Order (models.Model):
         Placed = 'Placed'
         Delivered = 'Delivered'
     # Cart_Item = models.ForeignKey(Cart_Item,on_delete=models.CASCADE)
-    Cart_Item = models.ManyToManyField(Cart_Item)
+    # Cart_Item = models.ManyToManyField(Cart_Item)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     first_name = models.CharField(max_length=100)

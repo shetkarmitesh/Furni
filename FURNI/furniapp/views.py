@@ -200,8 +200,8 @@ def checkout(request):
 def thankyou(request):
     if request.method == "POST":
         
-        first_name = request.POST['c_fname']
-        last_name = request.POST['c_lname']
+        first_name = str(request.POST['c_fname'])
+        last_name = str(request.POST['c_lname'])
         address = request.POST['c_address']
         addressOptional = request.POST['c_addressOptional']
         state = request.POST['c_state_country']
@@ -211,13 +211,13 @@ def thankyou(request):
         phoneNo = int(request.POST['c_phone'])
         totalAmount = float(request.POST['c_order_total'])
 
+        print(first_name+"hhhhhh")
         cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
-        cart[len(cart_details)] = cart_details
-        print(len(cart))
-        for i in cart:
-            print(i.productName)
+        # cart[len(cart_details)] = cart_details
+        # for i in cart:
+        #     print(i.productName)
         order= Order.objects.create(
-                    Cart_Item=cart_details,
+                    # Cart_Item.set(1),
                     user=request.user,
                     amount= totalAmount,
                     first_name = first_name,
@@ -229,8 +229,8 @@ def thankyou(request):
                     phoneNo =phoneNo,
                     posta_Zip =posta,
                     OrderNotes =orderNotes,
-                    # status = 'Placed'
+                    status = 'Placed'
                 )
         order.save()
-        # cart_details.delete()
+        cart_details.delete()
     return render(request,'thankyou.html')
