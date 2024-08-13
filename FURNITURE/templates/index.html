@@ -47,28 +47,69 @@
 					<p><a href="{% url 'shop'%}" class="btn">Explore</a></p>
 				</div>
 				<!-- End Column 1 -->
+				<div class="testimonial-slider-wrap text-center">
 
-				<!-- making the furniture list dyanmic -->
-				{% for furniture in furni%}
-				<!-- Start Column 2 -->
-				<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-					<a class="product-item" href="{% url 'cart'%}">
-						<!-- for static images -->
-						<!-- <img src="{{ baseUrl }}/{{ furniture.img }}" class="img-fluid product-thumbnail"> -->
-						<!-- for dynamic images from database -->
-						<img src="{{ furniture.img.url }}" class="img-fluid product-thumbnail">
-						<!-- <img src="{% static 'images/product-1.png'%}" class="img-fluid product-thumbnail"> -->
-						<h3 class="product-title">{{furniture.name}}</h3>
-						<strong class="product-price">${{furniture.price}}</strong>
+					<div id="testimonial-nav">
+						<span class="prev" data-controls="prev"><span class="fa fa-chevron-left"></span></span>
+						<span class="next" data-controls="next"><span class="fa fa-chevron-right"></span></span>
+						{% for i in range %}
+						<li data-target="#demo" data-slide-to="{{i}}" ></li>
+						{% endfor %}
+					</div>
 
-						<span class="icon-cross">
-							<img src="{% static 'images/cross.svg'%}" class="img-fluid">
-						</span>
-					</a>
-				</div>
-				<!-- End Column 2 -->
+					<div class="testimonial-slider">
+						  
+						  <!-- making the furniture list dyanmic -->
+						  {% for i in furni|slice:"0:" %}
 
-				{%endfor%}
+						 <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+							<a class="product-item" href="{% url 'cart'%}">
+								<img src="{{ i.img.url }}" class="img-fluid product-thumbnail">
+								<h3 class="product-title">{{i.name}}</h3>
+								<strong class="product-price">${{i.price}}</strong>
+								
+								<span class="icon-cross">
+									<img src="{% static 'images/cross.svg'%}" class="img-fluid">
+								</span>
+							</a>
+						</div>
+						{% if forloop.counter|divisibleby:4 and forloop.counter > 0 and not forloop.last %}
+						</div> <div class="testimonial-slider">
+						{% endif%}
+						{% endfor %}
+					</div>
+						  {% comment %}
+						  {% for furniture in furni |slice:"0:"%}
+						  
+						  <!-- {% for i in furni|slice:"1:" %} -->
+
+						  
+						  <!-- Start Column 2 -->
+						  <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+							<a class="product-item" href="{% url 'cart'%}">
+								<!-- for static images -->
+								<!-- <img src="{{ baseUrl }}/{{ furniture.img }}" class="img-fluid product-thumbnail"> -->
+								<!-- for dynamic images from database -->
+								<img src="{{ furniture.img.url }}" class="img-fluid product-thumbnail">
+								<!-- <img src="{% static 'images/product-1.png'%}" class="img-fluid product-thumbnail"> -->
+								<h3 class="product-title">{{furniture.name}}</h3>
+								<strong class="product-price">${{furniture.price}}</strong>
+								
+								<span class="icon-cross">
+									<img src="{% static 'images/cross.svg'%}" class="img-fluid">
+								</span>
+							</a>
+						</div>
+						<!-- End Column 2 -->
+						<!-- {% if forloop.counter|divisibleby:2 and forloop.counter > 0 and not forloop.last %}
+						</div> <div class="testimonial-slider">
+						{% endif%} -->
+						
+						{% endcomment %}
+						
+					</div>
+				  </div>
+				
 
 			</div>
 		</div>

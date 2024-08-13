@@ -32,8 +32,6 @@ class Cart_Item(models.Model):
     price = models.IntegerField()
     offer = models.BooleanField(default=False)
     img = models.ImageField(upload_to='orders')
-    address = models.CharField(max_length=50, default='', blank=True) 
-    phone = models.CharField(max_length=50, default='', blank=True) 
     date = models.DateField(default=datetime.datetime.today) 
     total = models.FloatField(default = 0.0)
     # totalAmount = models.FloatField(default = 0.0)        
@@ -61,6 +59,12 @@ class Order (models.Model):
     OrderNotes = models.CharField(max_length=500)
     status = models.CharField(max_length=10,choices=statsType.choices,default=statsType.Pending) 
 
-        
-
-
+    ProductName = models.CharField(max_length=100)
+    quantity = models.IntegerField(default=1) 
+    total = models.FloatField(default = 0.0)
+class ContactUs(models.Model):
+    first_name = models.CharField(max_length=100)
+    last_name = models.CharField(max_length=100)
+    email = models.EmailField(max_length=254)
+    message  = models.CharField(max_length=500)
+    

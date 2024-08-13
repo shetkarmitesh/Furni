@@ -1,6 +1,7 @@
+from math import ceil
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
-from .models import furniture,Team_Members,Cart_Item,Order
+from .models import furniture,Team_Members,Cart_Item,Order,ContactUs
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -34,9 +35,12 @@ def index(request):
     # return render(request,'index.html',{'furni':furni})
 
     furni= furniture.objects.all()
+    n= len(furni)
+    n_slides= n//4*ceil(n/4)-(n//4)
+
     team_members = Team_Members.objects.all()
 
-    return render(request,'index.html',{'furni':furni,'team_members':team_members})
+    return render(request,'index.html',{'furni':furni,'team_members':team_members,'no_slides':n_slides,'range':range(n_slides)})
 
 
 def about(request):
@@ -58,8 +62,6 @@ def blog(request):
 
     return render(request,'blog.html',{'team_members':team_members})
 
-def contactUs(request):
-    return render(request,'contact.html')
 
 
 
@@ -141,16 +143,16 @@ def add_to_cart(request, product_id):
                 total= total
             )
         cart_item.save()
+        sweetify.success(request, 'Item Added', timer=1000)
     else:
         # Update existing cart item quantity
-        cart_item = Cart_Item.objects.get(product_id=product_id)
+        cart_item = Cart_Item.objects.get(product_id=product_id,customer=request.user)
         cart_item.quantity+=1
         cart_item.total = price*cart_item.quantity
         # print(quantity)
         cart_item.save()
 
     # messages.info(request,"{} is added successfully".format(product.name))
-    sweetify.success(request, 'Item Added', timer=1000)
     return redirect('shop')
 @login_required
 def cart(request):
@@ -234,3 +236,18 @@ def thankyou(request):
         order.save()
         cart_details.delete()
     return render(request,'thankyou.html')
+
+
+def contactUs(request):
+    if request.method == "POST":
+        first_name = request.POST['fname']
+        last_name = request.POST['lname']
+        email = request.POST['email']
+        messages = request.POST['message']
+        contactUs= ContactUs.objects.create(
+            first_name = first_name,
+            last_name = last_name,
+            email= email,
+            message = messages)
+        contactUs.save()
+    return render(request,'contact.html')

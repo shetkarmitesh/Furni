@@ -298,3 +298,7 @@ Pagination
 
 
 if  cart items is zero not to be shown checkout page 
+
+
+cart icon with showin items number 
+page back info data as it showing 

@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     # defnine app
     'furniapp.apps.FurniappConfig',
     'sweetify',
-    'jquery'
+    'jquery',
+    
 
 ]
 
