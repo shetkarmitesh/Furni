@@ -230,6 +230,41 @@ passed the item id to delete fetech and delete that item
          cart_item = Cart_Item.objects.filter(id=cart_id, customer=request.user)
         if cart_item.exists():
         cart_item.delete()
+
+requesting the confirm delete option
+research about sweetalert2 where swel.fire() can be used for confirm remoce option : https://sweetalert2.github.io/
+to use this function i custom.js we have to create method on the basis on id which call the remove cart item function on views
+
+document.getElementById('removeItem').addEventListener('click', function () {
+	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
+	var token = $('input[name = csrfmiddlewaretoken]').val();
+    Swal.fire({
+		title: "Are you sure?",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#3085d6",
+		cancelButtonColor: "#d33",
+		confirmButtonText: "Yes, delete it!"
+	  }).then((result) => {
+		if (result.isConfirmed) {
+		 
+		  $.ajax({
+			method :"POST",
+			url : "/remove_cart_item",
+			data : {
+			  'product_id':product_id,
+			  csrfmiddlewaretoken: token
+			},success : function(response){
+				location.reload();
+			}
+		  });
+
+		 
+		}
+	  });
+});
+define the above functionin custom.js where by clicking on the remove button it will hit the remove cart function in view using ajax
+
 ***** Update Ooperation ******
 for that we will require the item id and the quantity updated
 we have button update cart : <button class="btn btn-black btn-sm btn-block" onclick="location.href='/update_cart_item/{{cart_detail.id}}/{{valueId}}/'">Update Cart</button>

@@ -59,7 +59,7 @@ class Order (models.Model):
     OrderNotes = models.CharField(max_length=500)
     status = models.CharField(max_length=10,choices=statsType.choices,default=statsType.Pending) 
 
-    ProductName = models.CharField(max_length=100)
+    ProductName = models.CharField(max_length=100,default="")
     quantity = models.IntegerField(default=1) 
     total = models.FloatField(default = 0.0)
 class ContactUs(models.Model):

@@ -104,7 +104,6 @@ $('.change_qauntity').click(function (e) {
 	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
 	var product_quantity = $(this).closest(('.product_data')).find('.product_quantity').val();
 	var token = $('input[name = csrfmiddlewaretoken]').val();
-	console.log("hiii");
 	$.ajax({
 			method :"POST",
 			url : "/update_cart_item",
@@ -117,3 +116,35 @@ $('.change_qauntity').click(function (e) {
 			}
 		  });
 })
+
+
+document.getElementById('removeItem').addEventListener('click', function () {
+	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
+	var token = $('input[name = csrfmiddlewaretoken]').val();
+    Swal.fire({
+		title: "Are you sure?",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#3085d6",
+		cancelButtonColor: "#d33",
+		confirmButtonText: "Yes, delete it!"
+	  }).then((result) => {
+		if (result.isConfirmed) {
+		 
+		  $.ajax({
+			method :"POST",
+			
+			method :"POST",
+			url : "/remove_cart_item",
+			data : {
+			  'product_id':product_id,
+			  csrfmiddlewaretoken: token
+			},success : function(response){
+				location.reload();
+			}
+		  });
+
+		 
+		}
+	  });
+});

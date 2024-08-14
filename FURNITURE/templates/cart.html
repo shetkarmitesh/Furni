@@ -65,7 +65,10 @@
           
                           </td>
                           <td>${{cart_detail.total}}</td>
-                          <td><a href="{% url 'remove_cart_item' cart_detail.id %} " class="btn btn-black btn-sm"><i class="fa-solid fa-trash"></i></a></td>
+                          <td><a id="removeItem" class="btn btn-black btn-sm"><i class="fa-solid fa-trash"></i></a></td>
+                          {%comment%}
+                          <!-- <td><a href="{% url 'remove_cart_item' cart_detail.id %} " id="basicAlert" class="btn btn-black btn-sm"><i class="fa-solid fa-trash"></i></a></td> -->
+                          {%endcomment%}
                         </tr>
                         <!-- Product 1 ended -->
                         
@@ -76,8 +79,6 @@
                 </form>
               </div>
               
-
-
               <div class="row">
                 <div class="col-md-6">
                   <div class="row mb-5">
@@ -140,5 +141,6 @@
           <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
           {% load sweetify %}
+          
           {% sweetify %}
 		  {% endblock mainsection %}

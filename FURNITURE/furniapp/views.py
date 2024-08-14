@@ -163,13 +163,18 @@ def cart(request):
     cart_details.totalAmount = total_cart_price
     return render(request,'cart.html',{'cart_details':cart_details,'total_cart_price':total_cart_price})
 @login_required
-def remove_cart_item(request,cart_id):
-    cart_item = Cart_Item.objects.filter(id=cart_id, customer=request.user)
-    if cart_item.exists():
-        cart_item.delete()
-    else:
-        print("product not found ")
-    sweetify.success(request, 'Item Deleted', timer=1000)
+def remove_cart_item(request):
+    if request.method =="POST":
+        prod_id = int(request.POST.get('product_id'))
+        # print(prod_id,"asdasdhkjadshakjdsa")
+
+        cart_item = Cart_Item.objects.filter(id=prod_id, customer=request.user)
+        if cart_item.exists() :
+
+            cart_item.delete()
+            pass
+       
+        # sweetify.success(request, 'Item Deleted', timer=1000)
     return redirect('cart')
 @login_required
 def update_cart_item(request):
@@ -191,13 +196,13 @@ def update_cart_item(request):
 
 def checkout(request):
     cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
-
+    user = User.objects.get(id=request.user.id)
     total_cart_price=0.0
     for i in cart_details : 
         total_cart_price = i.total + total_cart_price
 
    
-    return render(request,'checkout.html',{'cart_details':cart_details,'total_cart_price':total_cart_price})
+    return render(request,'checkout.html',{'cart_details':cart_details,'total_cart_price':total_cart_price,'user':user})
 
 def thankyou(request):
     if request.method == "POST":
