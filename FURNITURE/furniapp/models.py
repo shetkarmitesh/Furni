@@ -1,5 +1,6 @@
 from django.db import models
 import datetime 
+import uuid
 from django.contrib.auth.models import User
 # Create your models here.
 
@@ -39,13 +40,13 @@ class Cart_Item(models.Model):
         # return f'{self.customer} | {self.quantity} x {self.productName}'
         return f'{self.customer}'
 
-class Order (models.Model):
+class Orders(models.Model):
     class statsType (models.TextChoices):
         Pending = 'Pending'
         Placed = 'Placed'
         Delivered = 'Delivered'
-    # Cart_Item = models.ForeignKey(Cart_Item,on_delete=models.CASCADE)
-    # Cart_Item = models.ManyToManyField(Cart_Item)
+
+    order_id = models.CharField(max_length=36)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     first_name = models.CharField(max_length=100)
@@ -58,10 +59,12 @@ class Order (models.Model):
     posta_Zip = models.CharField(max_length=50)
     OrderNotes = models.CharField(max_length=500)
     status = models.CharField(max_length=10,choices=statsType.choices,default=statsType.Pending) 
-
+  
     ProductName = models.CharField(max_length=100,default="")
+    price = models.IntegerField()
     quantity = models.IntegerField(default=1) 
     total = models.FloatField(default = 0.0)
+
 class ContactUs(models.Model):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)

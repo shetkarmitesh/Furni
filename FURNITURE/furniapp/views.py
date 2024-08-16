@@ -1,10 +1,11 @@
 from math import ceil
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
-from .models import furniture,Team_Members,Cart_Item,Order,ContactUs
+from .models import furniture,Team_Members,Cart_Item,Orders,ContactUs
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+import uuid
 # pagination
 from django.core.paginator import Paginator
 # to display alerts
@@ -13,54 +14,38 @@ import sweetify
 # Create your views here.
 
 def index(request):
-    # f1= furniture()
-    # f1.id=1
-    # f1.name="Nordic Chair"
-    # f1.prise=50.00
-    # f1.img = 'product-1.png'
-
-    # f2= furniture()
-    # f2.id=2
-    # f2.name="Kruzo Aero Chair"
-    # f2.prise=78.00
-    # f2.img = 'product-2.png'
-
-    # f3= furniture()
-    # f3.id=3
-    # f3.name="Ergonomic Chair"
-    # f3.prise=43.00
-    # f3.img = 'product-3.png'
-    # furni = [f1,f2,f3]
-    # # passing the data to website 
-    # return render(request,'index.html',{'furni':furni})
-
+    
     furni= furniture.objects.all()
     n= len(furni)
     n_slides= n//4*ceil(n/4)-(n//4)
+    cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
 
     team_members = Team_Members.objects.all()
 
-    return render(request,'index.html',{'furni':furni,'team_members':team_members,'no_slides':n_slides,'range':range(n_slides)})
+    return render(request,'index.html',{'furni':furni,'team_members':team_members,'no_slides':n_slides,'range':range(n_slides),'cartItem':len(cart_details)})
 
 
 def about(request):
     team_members = Team_Members.objects.all()
-    return render(request,'about.html',{'team_members':team_members})
+    cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
+    return render(request,'about.html',{'team_members':team_members,'cartItem':len(cart_details)})
 
 def shop(request):
     furni= furniture.objects.all()
-    return render(request,'shop.html',{'furni':furni})
+    cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
+    return render(request,'shop.html',{'furni':furni,'cartItem':len(cart_details)})
 
 def services(request):
     furni= furniture.objects.all()
+    cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
     team_members = Team_Members.objects.all()
 
-    return render(request,'services.html',{'furni':furni,'team_members':team_members})
+    return render(request,'services.html',{'furni':furni,'team_members':team_members,'cartItem':len(cart_details)})
 
 def blog(request):
     team_members = Team_Members.objects.all()
-
-    return render(request,'blog.html',{'team_members':team_members})
+    cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
+    return render(request,'blog.html',{'team_members':team_members,'cartItem':len(cart_details)})
 
 
 
@@ -151,8 +136,8 @@ def add_to_cart(request, product_id):
         cart_item.total = price*cart_item.quantity
         # print(quantity)
         cart_item.save()
+        sweetify.success(request, 'Item Added', timer=1000)
 
-    # messages.info(request,"{} is added successfully".format(product.name))
     return redirect('shop')
 @login_required
 def cart(request):
@@ -161,7 +146,7 @@ def cart(request):
     for i in cart_details : 
         total_cart_price = i.total + total_cart_price
     cart_details.totalAmount = total_cart_price
-    return render(request,'cart.html',{'cart_details':cart_details,'total_cart_price':total_cart_price})
+    return render(request,'cart.html',{'cart_details':cart_details,'total_cart_price':total_cart_price,'cartItem':len(cart_details)})
 @login_required
 def remove_cart_item(request):
     if request.method =="POST":
@@ -196,13 +181,15 @@ def update_cart_item(request):
 
 def checkout(request):
     cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
+    if len(cart_details)<=0:
+        sweetify.success(request, 'Your Amazon Cart is empty',button='ok')
+        return redirect("/shop")
     user = User.objects.get(id=request.user.id)
     total_cart_price=0.0
     for i in cart_details : 
         total_cart_price = i.total + total_cart_price
-
    
-    return render(request,'checkout.html',{'cart_details':cart_details,'total_cart_price':total_cart_price,'user':user})
+    return render(request,'checkout.html',{'cart_details':cart_details,'total_cart_price':total_cart_price,'user':user,'cartItem':len(cart_details)})
 
 def thankyou(request):
     if request.method == "POST":
@@ -218,29 +205,33 @@ def thankyou(request):
         phoneNo = int(request.POST['c_phone'])
         totalAmount = float(request.POST['c_order_total'])
 
-        print(first_name+"hhhhhh")
         cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
-        # cart[len(cart_details)] = cart_details
-        # for i in cart:
-        #     print(i.productName)
-        order= Order.objects.create(
-                    # Cart_Item.set(1),
-                    user=request.user,
-                    amount= totalAmount,
-                    first_name = first_name,
-                    last_name = last_name,
-                    streetAddress =address,
-                    optionalAddress =addressOptional,
-                    Country =state,
-                    email =email,
-                    phoneNo =phoneNo,
-                    posta_Zip =posta,
-                    OrderNotes =orderNotes,
-                    status = 'Placed'
-                )
-        order.save()
+        order_id = str(uuid.uuid4()) 
+        # print(order_id,"sdfsagfghtedssghsterefs")
+        for cart in cart_details:
+            order= Orders.objects.create(
+                        order_id=order_id,
+                        user=request.user,
+                        amount= totalAmount,
+                        first_name = first_name,
+                        last_name = last_name,
+                        streetAddress =address,
+                        optionalAddress =addressOptional,
+                        Country =state,
+                        email =email,
+                        phoneNo =phoneNo,
+                        posta_Zip =posta,
+                        OrderNotes =orderNotes,
+                        status = 'Placed',
+
+                        price = cart.price,
+                        ProductName = cart.productName,
+                        quantity=cart.quantity,
+                        total=cart.total,
+                    )
+            order.save()
         cart_details.delete()
-    return render(request,'thankyou.html')
+    return render(request,'thankyou.html',{'cartItem':len(cart_details)})
 
 
 def contactUs(request):
@@ -250,9 +241,12 @@ def contactUs(request):
         email = request.POST['email']
         messages = request.POST['message']
         contactUs= ContactUs.objects.create(
-            first_name = first_name,
-            last_name = last_name,
+            first_name = first_name,  
+            last_name = last_name, 
             email= email,
             message = messages)
         contactUs.save()
-    return render(request,'contact.html')
+        sweetify.success(request, 'Send Succefully', timer=1000)
+        return redirect('contactUs')
+    cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
+    return render(request,'contact.html',{'cartItem':len(cart_details)}) 

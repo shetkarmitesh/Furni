@@ -46,7 +46,60 @@
 						vulputate velit imperdiet dolor tempor tristique. </p>
 					<p><a href="{% url 'shop'%}" class="btn">Explore</a></p>
 				</div>
-				
+				<div class="container">
+					<h2>Carousel Example</h2>
+					<div id="myCarousel" class="carousel slide" data-ride="carousel">
+					  <!-- Indicators -->
+					  <ol class="carousel-indicators">
+						<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+						{% for i in furni|slice:"0:" %}
+						<li data-target="#myCarousel" data-slide-to="{{i}}"></li>
+						{% endfor%}
+					  </ol>
+				  
+					  <!-- Wrapper for slides -->
+					  <div class="carousel-inner">
+						<div class="item active">
+							<img src="la.jpg" alt="Los Angeles" style="width:100%;">
+							<div class="carousel-caption">
+							  <h3>Los Angeles</h3>
+							  <p>LA is always so much fun!</p>
+							</div>
+						  </div>
+						
+						  <div class="item active">
+						{% for i in furni|slice:"0:" %}
+
+						<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
+							<a class="product-item" href="{% url 'cart'%}">
+								<img src="{{ i.img.url }}" class="img-fluid product-thumbnail">
+								<h3 class="product-title">{{i.name}}</h3>
+								<strong class="product-price">${{i.price}}</strong>
+								
+								<span class="icon-cross">
+									<img src="{% static 'images/cross.svg'%}" class="img-fluid">
+								</span>
+							</a>
+						</div>
+						
+						{% endfor %}
+					</div>
+							
+
+					  </div>
+				  
+					  <!-- Left and right controls -->
+					  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+						<span class="glyphicon glyphicon-chevron-left"></span>
+						<span class="sr-only">Previous</span>
+					  </a>
+					  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+						<span class="glyphicon glyphicon-chevron-right"></span>
+						<span class="sr-only">Next</span>
+					  </a>
+					</div>
+				</div>
+
 				<!-- End Column 1 -->
 				{% comment %}
 				<div class="testimonial-slider-wrap text-center">
@@ -380,4 +433,7 @@
 		</div>
 	</div>
 	<!-- End Blog Section -->
+	{% load sweetify %}
+          
+	{% sweetify %}
 	{% endblock mainsection %}

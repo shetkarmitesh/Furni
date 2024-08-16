@@ -259,7 +259,7 @@ document.getElementById('removeItem').addEventListener('click', function () {
 			}
 		  });
 
-		 
+		  
 		}
 	  });
 });
@@ -326,14 +326,17 @@ created a model orders with fields
 not work idea of adding cart item details in order table 
 after successfully placing the order cart get empty 
 
+if  cart items empty redirecting the to shop to add items just in checkout.views applay len function to verify the len <0 then redirect to page shop with sweetalert
 
 
 
-Pagination
+*********************Cart Icon with dyanmic dynamic cart items number *********************
+done by modifying the base.html added fontawesome icon for cart and added cart item number by passing the length of the cart in each view function
 
 
-if  cart items is zero not to be shown checkout page 
 
 
-cart icon with showin items number 
-page back info data as it showing 
+
+************sweetalert **********************
+not working with rendering in contact us views
+contact us after sending the message ask to send more or redirect to shopping
