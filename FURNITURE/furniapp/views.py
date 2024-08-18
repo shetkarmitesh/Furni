@@ -1,7 +1,7 @@
 from math import ceil
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
-from .models import furniture,Team_Members,Cart_Item,Orders,ContactUs
+from .models import furniture,Team_Members,Cart_Item,Orders,ContactUs,ShopDetails
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -52,6 +52,7 @@ def blog(request):
 
 
 def logout (request):
+    del request.session["member_id"]
     auth.logout(request)
     return render(request,'index.html')
 
@@ -63,6 +64,7 @@ def login(request):
         user = auth.authenticate(username=username ,password=password)
         if user is not None: 
             auth.login(request,user)
+            request.session["member_id"] = request.user.id
             return redirect('/')
         else: 
             messages.info(request,"invalid credentails")
@@ -184,12 +186,12 @@ def checkout(request):
     if len(cart_details)<=0:
         sweetify.success(request, 'Your Amazon Cart is empty',button='ok')
         return redirect("/shop")
-    user = User.objects.get(id=request.user.id)
+    # user = User.objects.get(id=request.user.id)
     total_cart_price=0.0
     for i in cart_details : 
         total_cart_price = i.total + total_cart_price
    
-    return render(request,'checkout.html',{'cart_details':cart_details,'total_cart_price':total_cart_price,'user':user,'cartItem':len(cart_details)})
+    return render(request,'checkout.html',{'cart_details':cart_details,'total_cart_price':total_cart_price,'cartItem':len(cart_details)})
 
 def thankyou(request):
     if request.method == "POST":
@@ -249,4 +251,6 @@ def contactUs(request):
         sweetify.success(request, 'Send Succefully', timer=1000)
         return redirect('contactUs')
     cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
-    return render(request,'contact.html',{'cartItem':len(cart_details)}) 
+    shopDetails = ShopDetails.objects.get(id = 1)
+
+    return render(request,'contact.html',{'cartItem':len(cart_details),'shopDetails':shopDetails}) 

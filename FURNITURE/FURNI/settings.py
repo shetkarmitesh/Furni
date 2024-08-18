@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-
 import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -42,7 +41,6 @@ INSTALLED_APPS = [
     'furniapp.apps.FurniappConfig',
     'sweetify',
     'jquery',
-    
 
 ]
 
@@ -139,8 +137,12 @@ STATIC_ROOT = os.path.join(BASE_DIR,'assets')
 # to store the images
 MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 
+# defining that extended user model
+AUTH_USER_MODEL = 'furniapp.CustomUser'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+

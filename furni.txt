@@ -335,8 +335,108 @@ done by modifying the base.html added fontawesome icon for cart and added cart i
 
 
 
-
-
 ************sweetalert **********************
 not working with rendering in contact us views
 contact us after sending the message ask to send more or redirect to shopping
+
+we forgot to add 
+
+{% load sweetify %}
+{% sweetify %}
+
+at the bottom of template
+
+************* Shop details model ******************
+info about the shopkeeper
+class ShopDetails(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    img = models.ImageField(upload_to='ShopDetails')
+    description = models.CharField(max_length=100)
+    email = models.EmailField(max_length=254)
+    phoneNo = models.IntegerField()
+
+
+*************** passing user information *********************
+we can directly access the the user data from table auth.user using : request.user.id , name etc
+
+*************** Error ***********************
+anchor tag of remove in cart.html for product from second place is not working
+dont know the problem with this code 
+// document.getElementById('removeItem').addEventListener('click', function () {
+// 	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
+// 	var token = $('input[name = csrfmiddlewaretoken]').val();
+//     Swal.fire({
+// 		title: "Are you sure?",
+// 		icon: "warning",
+// 		showCancelButton: true,
+// 		confirmButtonColor: "#3085d6",
+// 		cancelButtonColor: "#d33",
+// 		confirmButtonText: "Yes, delete it!"
+// 	  }).then((result) => {
+// 		if (result.isConfirmed) {
+		 
+// 		  $.ajax({
+// 			method :"POST",
+// 			url : "/remove_cart_item",
+// 			data : {
+// 			  'product_id':product_id,
+// 			  csrfmiddlewaretoken: token
+// 			},success : function(response){
+// 				location.reload();
+// 			}
+// 		  });
+
+		 
+// 		}
+// 	  });
+// });
+
+that why we use ajax function and access that function using class removeItem define in anchor tag
+
+
+*********************** Extending the user model ****************
+I want to add more fields to user models such as mobile number , address etc
+To extend user model:
+1.Create Create a Custom User Model 
+import and  extend abstract user : from django.contrib.auth.models import AbstractUser
+
+2.Update settings.py : AUTH_USER_MODEL = 'furniapp.CustomUser'
+
+3.Create and Apply Migrations:
+python manage.py makemigrations
+python manage.py migrate
+
+4.Update Forms and Admin:
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,default=1) 
+
+admin 
+
+class UserAdmin(BaseUserAdmin):
+    model = CustomUser
+    # Add fields to be displayed in the admin
+    fieldsets = (
+        (None, {'fields': ('username', 'password')}),
+        ('Personal info', {'fields': ('first_name', 'last_name', 'email', 'birth_date', 'profile_picture','phoneNo','subscriberOfNewsletter')}),
+        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'user_permissions')}),
+        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('username', 'password1', 'password2', 'email', 'birth_date', 'profile_picture'),
+        }),
+    )
+    list_display = ('username', 'email', 'first_name', 'last_name', 'birth_date', 'is_staff','subscriberOfNewsletter','phoneNo')
+    search_fields = ('username', 'email')
+    ordering = ('username',)
+
+admin.site.register(CustomUser, UserAdmin)
+
+But table is not reflecting after migrations
+
+
+
+
+
+

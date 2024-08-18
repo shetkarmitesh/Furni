@@ -1,7 +1,8 @@
 from django.db import models
 import datetime 
-import uuid
 from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 # Create your models here.
 
 # class furniture:
@@ -27,7 +28,9 @@ class Team_Members(models.Model):
 
 class Cart_Item(models.Model):
     product = models.ForeignKey(furniture,on_delete=models.CASCADE,default=1) 
-    customer = models.ForeignKey(User, on_delete=models.CASCADE,default=1) 
+    # customer = models.ForeignKey(User, on_delete=models.CASCADE,default=1)
+    # redefining the feild because we have extended user model 
+    customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,default=1) 
     quantity = models.IntegerField(default=1) 
     productName = models.CharField (max_length=100,default="")
     price = models.IntegerField()
@@ -47,7 +50,7 @@ class Orders(models.Model):
         Delivered = 'Delivered'
 
     order_id = models.CharField(max_length=36)
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=12,default=0.00,decimal_places=2)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -59,7 +62,7 @@ class Orders(models.Model):
     posta_Zip = models.CharField(max_length=50)
     OrderNotes = models.CharField(max_length=500)
     status = models.CharField(max_length=10,choices=statsType.choices,default=statsType.Pending) 
-  
+
     ProductName = models.CharField(max_length=100,default="")
     price = models.IntegerField()
     quantity = models.IntegerField(default=1) 
@@ -71,3 +74,16 @@ class ContactUs(models.Model):
     email = models.EmailField(max_length=254)
     message  = models.CharField(max_length=500)
     
+class ShopDetails(models.Model):
+    name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+    img = models.ImageField(upload_to='ShopDetails')
+    description = models.CharField(max_length=100)
+    email = models.EmailField(max_length=254)
+    phoneNo = models.IntegerField()
+
+class CustomUser(AbstractUser):
+    phoneNo = models.IntegerField()
+    phoneNo2 = models.IntegerField()
+    subscriberOfNewsletter = models.BooleanField()
+    birth_date=models.DateField()
