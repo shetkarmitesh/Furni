@@ -436,6 +436,27 @@ admin.site.register(CustomUser, UserAdmin)
 But table is not reflecting after migrations
 
 
+******************* Session in Django ************************
+Sessions are implemented via a piece of middleware.
+
+To enable session functionality, do the following:
+Edit the MIDDLEWARE setting and make sure it contains 'django.contrib.sessions.middleware.SessionMiddleware'. The 
+default settings.py created by django-admin startproject has SessionMiddleware activated.
+
+
+not completed
+
+*************** My orders Page ****************************
+Create myOrders.html and link base.html file ,mention in url and created  myorders function in views.py
+
+
+
+
+
+
+remove cart is not working
+newly adding item throwing error
+
 
 
 

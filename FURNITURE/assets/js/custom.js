@@ -116,37 +116,60 @@ $('.change_qauntity').click(function (e) {
 			}
 		  });
 })
-
-
-$('.removeItem').click('click', function () {
+$('.removeItem').click(function (e) {
+	e.preventDefault();
 	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
 	var token = $('input[name = csrfmiddlewaretoken]').val();
-    Swal.fire({
-		title: "Are you sure?",
-		icon: "warning",
-		showCancelButton: true,
-		confirmButtonColor: "#3085d6",
-		cancelButtonColor: "#d33",
-		confirmButtonText: "Yes, delete it!"
-	  }).then((result) => {
-		if (result.isConfirmed) {
-		 
-		  $.ajax({
+	$.ajax({
 			method :"POST",
 			url : "/remove_cart_item",
 			data : {
 			  'product_id':product_id,
 			  csrfmiddlewaretoken: token
 			},success : function(response){
-				location.reload();
+			 
 			}
 		  });
+})
+
+
+// $('.removeItem').click('click', function () {
+// 	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
+// 	var token = $('input[name = csrfmiddlewaretoken]').val();
+//     Swal.fire({
+// 		title: "Are you sure?",
+// 		icon: "warning",
+// 		showCancelButton: true,
+// 		confirmButtonColor: "#3085d6",
+// 		cancelButtonColor: "#d33",
+// 		confirmButtonText: "Yes, delete it!"
+// 	  }).then((result) => {
+// 		if (result.isConfirmed) {
+			
+// 			$.ajax({
+// 					// method :"POST",
+// 					// url : "/remove_cart_item",
+// 					// 	data : {
+// 						// console.log("hiii")
+// 		// 	  'product_id':product_id,
+// 		// 	  csrfmiddlewaretoken: token
+// 		// 	},success : function(response){
+// 		// 		location.reload();
+// 			// }
+// 			method :"POST",
+// 			url : "/remove_cart_item",
+// 			data : {
+// 			  'product_id':product_id,
+// 			  csrfmiddlewaretoken: token
+// 			},success : function(response){
+			 
+// 			}
+// 		  });
 
 		 
-		}
-	  });
-});
-
+// 		}
+// 	  });
+// });
 // document.getElementById('removeItem').addEventListener('click', function () {
 // 	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
 // 	var token = $('input[name = csrfmiddlewaretoken]').val();

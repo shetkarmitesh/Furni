@@ -902,3 +902,19 @@ textarea {
     height: 50px;
     border-radius: 50%;
     background: rgba(59, 93, 80, 0.2); }
+
+
+/* Custom styles for modals */
+.modal-dialog {
+  max-width: 90%; /* Adjust this percentage as needed */
+  margin: 1.75rem auto;
+}
+
+.modal-content {
+  height: auto; /* Adjusts to the content height */
+}
+
+.modal-dialog-scrollable {
+  max-height: 80vh; /* Adjust the max height if needed */
+  overflow-y: auto;
+}

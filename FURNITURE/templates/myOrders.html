@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block mainsection %}
+{% load static %}
+{% static "images" as baseUrl %}
+		<!-- Start Hero Section -->
+			<div class="hero">
+				<div class="container">
+					<div class="row justify-content-between">
+						<div class="col-lg-5">
+							<div class="intro-excerpt">
+								<h1>My Orders</h1>
+								<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+								<p><a href="{% url 'shop' %}" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
+							</div>
+						</div>
+						<div class="col-lg-7">
+							<div class="hero-img-wrap">
+								<img src="{% static 'images/couch.png'%}" class="img-fluid">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-- End Hero Section -->
+
+		<!-- Start My orders Section -->
+		<div class="untree_co-section before-footer-section">
+            <div class="container">
+              <div class="row mb-5">
+                  <div class="site-blocks-table"  >
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th class="product-thumbnail">Order Id</th>
+                          <th class="product-total"> Date</th>
+                          <th class="product-total"> Status</th>
+                          <th class="product-total"> Total Amount</th>
+                          <th class="product-total"> View Details</th>
+                        </tr>
+                      </thead>
+                      <!-- Product 1 Started -->
+
+                       {% for order in orderIds%}
+                       
+                      <tbody class="product_data">
+                        <tr>
+                          <td class="product-thumbnail">
+                            <h6 class="h6 text-black">{{order.order_id}}</h6>
+                          </td>
+                          <td class="product-name">
+                            <h6 class="h6 text-black">{{order.dateOforders}}</h6>
+                          </td>
+                          <td>{{order.status}}</td>
+                          <td>
+                            <h2 class="h6 text-black">{{order.amount}}</h2>
+                           
+                          </td>
+                          <td>
+                            <button type="button" class="btn btn-primary text-primary" data-toggle="modal" data-target="#exampleModal{{order.order_id}}">
+                              View Details
+                          </button>
+                      
+                          <!-- Modal -->
+                          <div class="modal fade text-black" id="exampleModal{{order.order_id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                              <div class="modal-dialog " role="document">
+                                  <div class="modal-content">
+                                      <div class="modal-header">
+                                          <h5 class="modal-title" id="exampleModalLabel">Order Details</h5>
+                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                              <span aria-hidden="true">&times;</span>
+                                          </button>
+                                      </div>
+                                      <div class="modal-body">
+                                          <!-- Dynamic content will be loaded here -->
+                                          <p>Order ID: {{ order.order_id }}</p>
+                                          <p>Status: {{ order.status }} <span>Amount:  {{ order.amount }}</span></p>
+                                          <!-- Add more order details as needed -->
+                                          <table class="table">
+                                            <thead>
+                                              <tr>
+                                                <th class="product-total"> Product Name</th>
+                                                <th class="product-total"> Price</th>
+                                                <th class="product-total"> Quantity</th>
+                                                <th class="product-total"> Total Amount</th>
+                                                <th class="product-total"> Add To Cart</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {% for product in orderDetails %}
+                                              <tr>
+                                                  {% if product.order_id == order.order_id %}
+                                                      <td class="product-thumbnail">
+                                                        <h6 class="h6 text-black">{{product.ProductName}}</h6>
+                                                      </td>
+                                                      <td class="product-thumbnail">
+                                                        <h6 class="h6 text-black">{{product.price}}</h6>
+                                                      </td>
+                                                      <td class="product-thumbnail">
+                                                        <h6 class="h6 text-black">{{product.quantity}}</h6>
+                                                      </td>
+                                                      <td class="product-thumbnail">
+                                                        <h6 class="h6 text-black">{{product.total}}</h6>
+                                                      </td>
+                                                      <td class="product-thumbnail">
+                                                        <a type="button" href="{% url 'add_to_cart' product.product_id%}" class="btn btn-primary text-primary" ">
+                                                          Add To Cart
+                                                        </a>
+                                                      </td>
+                                                  {% endif %}
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                            </table>
+                                      </div>
+                                      <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          </td>
+                          
+                        </tr>
+                        
+                        {% endfor %}
+
+                      </tbody>
+                    </table>
+                  </div>
+              </div>
+              
+		
+
+{% endblock mainsection %}

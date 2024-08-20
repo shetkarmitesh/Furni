@@ -1,7 +1,7 @@
 from math import ceil
 from django.shortcuts import render,redirect
 from django.http import HttpResponse, JsonResponse
-from .models import furniture,Team_Members,Cart_Item,Orders,ContactUs,ShopDetails
+from .models import furniture,Team_Members,Cart_Item,Orders,ContactUs,ShopDetails,CustomUser
 from django.contrib.auth.models import User,auth
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -84,20 +84,20 @@ def register(request):
 
         # adding the data to database
         if password1==password2:
-            if User.objects.filter(username=username).exists():
+            if CustomUser.objects.filter(username=username).exists():
                 # print("username taknen ")
                 messages.info(request, "The username is taken")
                 # return render(request,'register.html')
                 return redirect('register')
                 
-            elif User.objects.filter(email=email).exists():
+            elif CustomUser.objects.filter(email=email).exists():
                 # print("user already exists")
                 messages.info(request, "The user is alredy taken")
                 return redirect('register')
 
                 # return render(request,'register.html')
 
-            user = User.objects.create_user(username=username,password=password1,email=email,first_name=first_name,last_name=last_name)
+            user = CustomUser.objects.create_user(username=username,password=password1,email=email,first_name=first_name,last_name=last_name)
             user.save()
             # print("user created successfully***********")
             # messages.info(request, "user created successfully")
@@ -117,20 +117,22 @@ def add_to_cart(request, product_id):
     price = product.price
     total = quantity * price
 
-# Check if the item already exists in the cart for the current user
+    # Check if the item already exists in the cart for the current user
     if not Cart_Item.objects.filter(product_id=product_id, customer=request.user).exists():
         # Create a new cart item if it doesn't exist
         cart_item = Cart_Item.objects.create(
                 product=product,
                 customer=request.user,
                 quantity=quantity,
-                productName=product.name,
-                price=price,
+                # productName=product.name,
+                # price=price,
                 img= product.img,
                 total= total
             )
         cart_item.save()
+        print("jjknkjasdkjfnnajdbfk")
         sweetify.success(request, 'Item Added', timer=1000)
+        return redirect()
     else:
         # Update existing cart item quantity
         cart_item = Cart_Item.objects.get(product_id=product_id,customer=request.user)
@@ -152,6 +154,7 @@ def cart(request):
 @login_required
 def remove_cart_item(request):
     if request.method =="POST":
+        print("eretnjk ajsaowboabdlablblaqe")
         prod_id = int(request.POST.get('product_id'))
         # print(prod_id,"asdasdhkjadshakjdsa")
 
@@ -208,10 +211,12 @@ def thankyou(request):
         totalAmount = float(request.POST['c_order_total'])
 
         cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
+        for i in cart_details:
+            print(i.product_id,i.productName)
         order_id = str(uuid.uuid4()) 
-        # print(order_id,"sdfsagfghtedssghsterefs")
         for cart in cart_details:
             order= Orders.objects.create(
+                        product_id = cart.product_id,
                         order_id=order_id,
                         user=request.user,
                         amount= totalAmount,
@@ -225,10 +230,7 @@ def thankyou(request):
                         posta_Zip =posta,
                         OrderNotes =orderNotes,
                         status = 'Placed',
-
-                        price = cart.price,
-                        ProductName = cart.productName,
-                        quantity=cart.quantity,
+                    
                         total=cart.total,
                     )
             order.save()
@@ -254,3 +256,10 @@ def contactUs(request):
     shopDetails = ShopDetails.objects.get(id = 1)
 
     return render(request,'contact.html',{'cartItem':len(cart_details),'shopDetails':shopDetails}) 
+
+def myOrders(request):
+    orders_Ids = Orders.objects.values('order_id','dateOforders','status','amount').filter(user_id = request.user.id).distinct()
+    ordersDetails = Orders.objects.all().filter(user_id = request.user.id)
+    # for i in ordersDetails:
+    #     print(i.name)
+    return render(request,'myOrders.html',{'orderIds':orders_Ids,'orderDetails':ordersDetails})

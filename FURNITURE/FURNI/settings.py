@@ -85,7 +85,7 @@ WSGI_APPLICATION = 'FURNI.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'furnitureDetails',
+        'NAME': 'furnitureDetails1',
         'USER': 'root',
         'PASSWORD': 'zxcvbnm1234567890$',
         'HOST':'localhost',
