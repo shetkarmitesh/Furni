@@ -131,7 +131,6 @@ def add_to_cart(request, product_id):
             )
         cart_item.save()
         sweetify.success(request, 'Item Added', timer=1000)
-        return redirect()
     else:
         # Update existing cart item quantity
         cart_item = Cart_Item.objects.get(product_id=product_id,customer=request.user)
@@ -254,6 +253,6 @@ def contactUs(request):
 def myOrders(request):
     orders_Ids = Orders.objects.values('order_id','dateOforders','status','amount').filter(user_id = request.user.id).distinct()
     ordersDetails = Orders.objects.all().filter(user_id = request.user.id)
-    # for i in ordersDetails:
-    #     print(i.name)
-    return render(request,'myOrders.html',{'orderIds':orders_Ids,'orderDetails':ordersDetails})
+    cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
+    
+    return render(request,'myOrders.html',{'orderIds':orders_Ids,'orderDetails':ordersDetails,'cartItem':len(cart_details)})

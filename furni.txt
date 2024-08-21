@@ -449,8 +449,11 @@ not completed
 *************** My orders Page ****************************
 Create myOrders.html and link base.html file ,mention in url and created  myorders function in views.py
 
+then by applying the filter to extract the order id and dispalied the order id status date view details options 
+in view details by fetching the values based on order id displayed products
+and add to cart option
 
-
+completed
 
 
 
@@ -458,8 +461,9 @@ remove cart is not working
 i was saving the Scripts links in main file but strore it to the base file( path of cdn and jquery in base.html)
 
 newly adding item throwing error
+because mistakenly the return redirect was empty
 
 
 
 
-
+*************************
