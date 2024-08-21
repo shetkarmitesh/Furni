@@ -2,6 +2,7 @@
 {% block mainsection %}
 {% load static %}
 {% static "images" as baseUrl %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 		<!-- Start Hero Section -->
 			<div class="hero">
@@ -39,8 +40,8 @@
                         </tr>
                       </thead>
                       <!-- Product 1 Started -->
-                       {% for cart_detail in cart_details%}
-                       <!-- <h2>{{cart_detail.productName}}</h2> -->
+                      <!-- <h2>{{cart_detail.productName}}</h2> -->
+                      {% for cart_detail in cart_details%}
                       <tbody class="product_data">
                         <tr>
                           <td class="product-thumbnail">
@@ -55,7 +56,7 @@
                               <div class="input-group-prepend">
                                 <button class="btn btn-outline-black change_qauntity decrease" type="button">&minus;</button>
                               </div> 
-                              <input type="hidden" class="form-control text-center product_id" value="{{cart_detail.id}}" placeholder="" >
+                              <input type="hidden" class="form-control text-center cart_id" value="{{cart_detail.id}}" placeholder="" >
                               {% csrf_token %}
                               <input type="number" class="form-control text-center product_quantity" value="{{cart_detail.quantity}}" placeholder="" >
                               <div class="input-group-append">
@@ -66,14 +67,12 @@
                           </td>
                           <td>${{cart_detail.total}}</td>
                           <td><a class="btn btn-black btn-sm removeItem"><i class="fa-solid fa-trash"></i></a></td>
-                          {%comment%}
-                          <!-- <td><a href="{% url 'remove_cart_item' cart_detail.id %} " id="basicAlert" class="btn btn-black btn-sm"><i class="fa-solid fa-trash"></i></a></td> -->
-                          {%endcomment%}
+                          
                         </tr>
                         <!-- Product 1 ended -->
                         
-                        {%endfor%}
                       </tbody>
+                      {%endfor%}
                     </table>
                   </div>
                 </form>
@@ -138,8 +137,10 @@
               </div>
             </div>
           </div>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
-          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+            
+
             {% load sweetify %}
           
           {% sweetify %}

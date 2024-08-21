@@ -455,6 +455,8 @@ Create myOrders.html and link base.html file ,mention in url and created  myorde
 
 
 remove cart is not working
+i was saving the Scripts links in main file but strore it to the base file( path of cdn and jquery in base.html)
+
 newly adding item throwing error
 
 

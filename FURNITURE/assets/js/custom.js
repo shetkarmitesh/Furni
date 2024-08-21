@@ -100,76 +100,57 @@
 
 
 $('.change_qauntity').click(function (e) {
+	console.log("hhhh");
 	e.preventDefault();
-	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
+	var cart_id = $(this).closest(('.product_data')).find('.cart_id').val();
 	var product_quantity = $(this).closest(('.product_data')).find('.product_quantity').val();
 	var token = $('input[name = csrfmiddlewaretoken]').val();
 	$.ajax({
-			method :"POST",
-			url : "/update_cart_item",
-			data : {
-			  'product_id':product_id,
-			  'product_qty':product_quantity,
-			  csrfmiddlewaretoken: token
-			},success : function(response){
-			 
-			}
-		  });
-})
-$('.removeItem').click(function (e) {
-	e.preventDefault();
-	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
-	var token = $('input[name = csrfmiddlewaretoken]').val();
-	$.ajax({
-			method :"POST",
-			url : "/remove_cart_item",
-			data : {
-			  'product_id':product_id,
-			  csrfmiddlewaretoken: token
-			},success : function(response){
-			 
-			}
-		  });
-})
-
-
-// $('.removeItem').click('click', function () {
-// 	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
-// 	var token = $('input[name = csrfmiddlewaretoken]').val();
-//     Swal.fire({
-// 		title: "Are you sure?",
-// 		icon: "warning",
-// 		showCancelButton: true,
-// 		confirmButtonColor: "#3085d6",
-// 		cancelButtonColor: "#d33",
-// 		confirmButtonText: "Yes, delete it!"
-// 	  }).then((result) => {
-// 		if (result.isConfirmed) {
+		method :"POST",
+		url : "/update_cart_item",
+		data : {
+		  'cart_id':cart_id,
+		  'product_qty':product_quantity,
+		  csrfmiddlewaretoken: token
+		},success : function(response){
+			console.log("asdsfdg");
 			
-// 			$.ajax({
-// 					// method :"POST",
-// 					// url : "/remove_cart_item",
-// 					// 	data : {
-// 						// console.log("hiii")
-// 		// 	  'product_id':product_id,
-// 		// 	  csrfmiddlewaretoken: token
-// 		// 	},success : function(response){
-// 		// 		location.reload();
-// 			// }
-// 			method :"POST",
-// 			url : "/remove_cart_item",
-// 			data : {
-// 			  'product_id':product_id,
-// 			  csrfmiddlewaretoken: token
-// 			},success : function(response){
-			 
-// 			}
-// 		  });
+		}
+	  });
+	
+})
 
+
+$('.removeItem').click('click', function () {
+	var cart_id = $(this).closest(('.product_data')).find('.cart_id').val();
+	var token = $('input[name = csrfmiddlewaretoken]').val();
+	
+    Swal.fire({
+		title: "Are you sure?",
+		icon: "warning",
+		showCancelButton: true,
+		confirmButtonColor: "#3085d6",
+		cancelButtonColor: "#d33",
+		confirmButtonText: "Yes, delete it!"
+	}).then((result) => {
+		if (result.isConfirmed) {
+			
+			$.ajax({
+				method :"POST",
+				url : "/remove_cart_item",
+				data : {
+					'cart_id':cart_id,
+					csrfmiddlewaretoken: token
+				},success : function(response){
+					location.reload();
+				}
+			});
+			
 		 
-// 		}
-// 	  });
-// });
+		}
+	  });
+});
+
 // document.getElementById('removeItem').addEventListener('click', function () {
 // 	var product_id = $(this).closest(('.product_data')).find('.product_id').val();
 // 	var token = $('input[name = csrfmiddlewaretoken]').val();
@@ -197,4 +178,19 @@ $('.removeItem').click(function (e) {
 		 
 // 		}
 // 	  });
+// });
+
+// $('.try').click(function myFunction() {
+// 	var token = $('input[name = csrfmiddlewaretoken]').val();
+
+// });	
+// $.ajax({
+// 	method :"Get",
+// 	url : "/remove_cart_item",
+// 		data : {
+// 		//   'product_id':product_id,
+// 		  csrfmiddlewaretoken: token
+// 		},success : function(response){
+// 			location.reload();
+// 		}
 // });

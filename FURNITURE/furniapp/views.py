@@ -130,7 +130,6 @@ def add_to_cart(request, product_id):
                 total= total
             )
         cart_item.save()
-        print("jjknkjasdkjfnnajdbfk")
         sweetify.success(request, 'Item Added', timer=1000)
         return redirect()
     else:
@@ -154,32 +153,27 @@ def cart(request):
 @login_required
 def remove_cart_item(request):
     if request.method =="POST":
+        cart_id = int(request.POST.get('cart_id'))
+        cart_item = Cart_Item.objects.filter(id=cart_id, customer=request.user)
         print("eretnjk ajsaowboabdlablblaqe")
-        prod_id = int(request.POST.get('product_id'))
-        # print(prod_id,"asdasdhkjadshakjdsa")
-
-        cart_item = Cart_Item.objects.filter(id=prod_id, customer=request.user)
         if cart_item.exists() :
 
             cart_item.delete()
-            pass
-       
         # sweetify.success(request, 'Item Deleted', timer=1000)
+            return redirect('cart')
     return redirect('cart')
 @login_required
 def update_cart_item(request):
     if request.method =="POST":
-        prod_id = int(request.POST.get('product_id'))
+        cart_id = int(request.POST.get('cart_id'))
         prod_qty = int(request.POST.get('product_qty'))
-        cart_item = Cart_Item.objects.filter(id=prod_id, customer=request.user)
-       
+        cart_item = Cart_Item.objects.filter(id=cart_id, customer=request.user)
         if cart_item.exists():
-            cart_item = Cart_Item.objects.get(id=prod_id)
+            cart_item = Cart_Item.objects.get(id=cart_id)
             cart_item.quantity= prod_qty
             cart_item.total = cart_item.price*cart_item.quantity
             cart_item.save()
             sweetify.success(request, 'Item Updated', timer=1000)
-       
     return redirect('cart')
 
 
