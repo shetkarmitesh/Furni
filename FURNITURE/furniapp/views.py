@@ -52,7 +52,7 @@ def blog(request):
 
 
 def logout (request):
-    del request.session["member_id"]
+    # del request.session["member_id"]
     auth.logout(request)
     return render(request,'index.html')
 
@@ -154,7 +154,6 @@ def remove_cart_item(request):
     if request.method =="POST":
         cart_id = int(request.POST.get('cart_id'))
         cart_item = Cart_Item.objects.filter(id=cart_id, customer=request.user)
-        print("eretnjk ajsaowboabdlablblaqe")
         if cart_item.exists() :
 
             cart_item.delete()
@@ -179,17 +178,19 @@ def update_cart_item(request):
 
 def checkout(request):
     cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
-    if len(cart_details)<=0:
-        sweetify.success(request, 'Your Amazon Cart is empty',button='ok')
-        return redirect("/shop")
-    # user = User.objects.get(id=request.user.id)
     total_cart_price=0.0
     for i in cart_details : 
         total_cart_price = i.total + total_cart_price
-   
+    if request.method == "POST":
+        if len(cart_details)<=0:
+            sweetify.success(request, 'Your Amazon Cart is empty',button='ok')
+            return redirect("/shop")
+        # user = User.objects.get(id=request.user.id)
+        return redirect('checkout')
     return render(request,'checkout.html',{'cart_details':cart_details,'total_cart_price':total_cart_price,'cartItem':len(cart_details)})
 
 def thankyou(request):
+    cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
     if request.method == "POST":
         
         first_name = str(request.POST['c_fname'])
@@ -203,9 +204,8 @@ def thankyou(request):
         phoneNo = int(request.POST['c_phone'])
         totalAmount = float(request.POST['c_order_total'])
 
-        cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
-        for i in cart_details:
-            print(i.product_id,i.productName)
+        # for i in cart_details:
+        #     print(i.product_id,i.productName)
         order_id = str(uuid.uuid4()) 
         for cart in cart_details:
             order= Orders.objects.create(
@@ -228,6 +228,9 @@ def thankyou(request):
                     )
             order.save()
         cart_details.delete()
+        return redirect('thankyou')
+    
+    # return redirect('thankyou',{'cartItem':len(cart_details)})
     return render(request,'thankyou.html',{'cartItem':len(cart_details)})
 
 
@@ -256,3 +259,18 @@ def myOrders(request):
     cart_details = Cart_Item.objects.all().filter(customer_id=request.user.id)
     
     return render(request,'myOrders.html',{'orderIds':orders_Ids,'orderDetails':ordersDetails,'cartItem':len(cart_details)})
+
+def SubscribeNewsletter(request):
+    print(request.user,"aaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    if request.method == "POST":
+        first_name = request.POST['name']
+        email = request.POST['email']
+     
+        if CustomUser.objects.get(id= request.user.id,email=email).exist():
+            user = CustomUser.objects.get(id= request.user.id,email=email)
+            user.subscriberOfNewsletter=True
+            user.save()
+            
+            return redirect('/')
+        
+             

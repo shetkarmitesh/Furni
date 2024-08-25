@@ -466,4 +466,12 @@ because mistakenly the return redirect was empty
 
 
 
-*************************
+************************* Redirect method **********************
+making all the the mandatory function to redirect to protect from back page
+ error like :
+ NoReverseMatch at /checkout
+Reverse for 'checkout' with arguments '({'cart_details': <QuerySet [<Cart_Item: asdf>]>, 'total_cart_price': 162.0, 'cartItem': 1},)' not found. 1 pattern(s) tried: ['checkout\\Z']
+
+to handle such error 
+
+************************** Subscribe to Newsletter **************

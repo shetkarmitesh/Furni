@@ -19,6 +19,7 @@ urlpatterns = [
      path('add_to_cart/<int:product_id>/', views.add_to_cart, name='add_to_cart'), 
      path('remove_cart_item', views.remove_cart_item, name='remove_cart_item'), 
      path('update_cart_item',views.update_cart_item, name='update_cart_item'), 
+     path('subscribeNewsletter', views.SubscribeNewsletter,name="SubscribeNewsletter"),
 
 ]
 

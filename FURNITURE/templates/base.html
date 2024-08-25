@@ -61,7 +61,7 @@
 						</div>
                     </li> -->
                     {% if user.is_authenticated %}
-						<li class="nav-link" ><b>Hello, {{ user.first_name }}</b></li>
+						<li class="nav-link" ><b>Hello, {{ user.first_name }} <img src="{% static 'images/user.svg'%}"></b></li>
 						<li><a class="nav-link" href="{% url 'logout' %}"><b>Logout</b></a></li>
 						<li><a class="nav-link" href="{% url 'myOrders' %}"><b>My Orders</b></a></li>
 						<li><a class="nav-link" href="{% url 'cart' %}"><b>Cart <i class="fas fa-shopping-cart" style=" color: #e3e3e3;"></i><span class='badge badge-warning' id='lblCartCount'>{{cartItem}}</span></b></a></li>
@@ -113,7 +113,7 @@
 			<div class="sofa-img">
 				<img src="{% static 'images/sofa.png'%}" alt="Image" class="img-fluid">
 			</div>
-
+			{% if user.is_authenticated%}
 			<div class="row">
 				<div class="col-lg-8">
 					<div class="subscription-form">
@@ -121,12 +121,13 @@
 									src="{% static 'images/envelope-outline.svg'%}" alt="Image"
 									class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
 
-						<form action="#" class="row g-3">
+						<form action="subscribeNewsletter" method="post" class="row g-3">
+							{% csrf_token%}
 							<div class="col-auto">
-								<input type="text" class="form-control" placeholder="Enter your name">
+								<input type="text" class="form-control" name="name" value="{{request.user.first_name}} {{request.user.last_name}}" placeholder="Enter your name" >
 							</div>
 							<div class="col-auto">
-								<input type="email" class="form-control" placeholder="Enter your email">
+								<input type="email" class="form-control" name="email" placeholder="Enter your email" value="{{request.user.email}}" >
 							</div>
 							<div class="col-auto">
 								<button class="btn btn-primary">
@@ -138,7 +139,7 @@
 					</div>
 				</div>
 			</div>
-
+			{%endif%}
 			<div class="row g-5 mb-5">
 				<div class="col-lg-4">
 					<div class="mb-4 footer-logo-wrap"><a href="#" class="footer-logo">Furni<span>.</span></a></div>
@@ -227,7 +228,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.6.5/sweetalert2.all.min.js"></script>
-	<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+	<script type="text/javasc	ript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 
