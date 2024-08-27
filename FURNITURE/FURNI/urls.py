@@ -24,7 +24,7 @@ urlpatterns = [
     path('',include("furniapp.urls")),
 ]
 
-# In to make images dynamic we are creating folder media and storing the images which are uploaded
+# for making images dynamic we are creating folder media and storing the images which are uploaded
 urlpatterns = urlpatterns + static(settings.MEDIA_URL,document_root = settings.MEDIA_ROOT)
 
 
